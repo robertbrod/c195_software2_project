@@ -1,6 +1,6 @@
 package rbrod.scheduleapp;
 
-import helper.JDBC;
+import Database.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,19 +8,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application {
+public class ScheduleApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(ScheduleApplication.class.getResource("login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
         stage.show();
-
-        JDBC.openConnection();
-        JDBC.closeConnection();
     }
 
     public static void main(String[] args) {
+        JDBC.openConnection();
         launch();
+        JDBC.closeConnection();
     }
 }
