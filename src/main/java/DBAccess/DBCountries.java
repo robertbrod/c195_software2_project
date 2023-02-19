@@ -1,7 +1,7 @@
 package DBAccess;
 
-import Model.Country;
 import Database.JDBC;
+import Model.Country;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,8 +10,56 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBCountries {
+
+    public static Country getCountry(int countryId){
+        Country country = null;
+
+        try{
+            String sql = "SELECT * FROM countries WHERE Country_ID=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setInt(1, countryId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Country_ID");
+                String name = rs.getString("Country");
+                country = new Country(id, name);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return country;
+    }
+
+    public static Country getCountry(String countryName){
+        Country country = null;
+
+        try{
+            String sql = "SELECT * FROM countries WHERE Country=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setString(1, countryName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Country_ID");
+                String name = rs.getString("Country");
+                country = new Country(id, name);
+            }
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return country;
+    }
+
     public static ObservableList<Country> getAllCountries(){
-        ObservableList<Country> countryList = FXCollections.observableArrayList();
+        ObservableList<Country> countries = FXCollections.observableArrayList();
 
         try{
             String sql = "SELECT * FROM countries";
@@ -21,16 +69,17 @@ public class DBCountries {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                int countryId = rs.getInt("Country_ID");
-                String countryName = rs.getString("Country");
-                Country country = new Country(countryId, countryName);
-                countryList.add(country);
+                int id = rs.getInt("Country_ID");
+                String name = rs.getString("Country");
+
+                Country country = new Country(id, name);
+                countries.add(country);
             }
 
         } catch(SQLException e){
             e.printStackTrace();
         }
 
-        return countryList;
+        return countries;
     }
 }

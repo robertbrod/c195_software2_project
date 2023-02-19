@@ -25,7 +25,7 @@
           <RowConstraints maxHeight="116.0" minHeight="116.0" prefHeight="116.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="loginButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="500.0" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Button fx:id="loginBtn" mnemonicParsing="false" onAction="#loginBtnAction" prefHeight="50.0" prefWidth="500.0" text="Login" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
             <TextField fx:id="usernameField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" promptText="Username" GridPane.halignment="CENTER" />
             <TextField fx:id="passwordField" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="500.0" promptText="Password" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
          </children>

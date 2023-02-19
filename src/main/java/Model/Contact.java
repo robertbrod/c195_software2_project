@@ -16,7 +16,19 @@ public class Contact {
 
     public SimpleIntegerProperty getId(){ return id; }
 
+    public void setId(int id){
+        this.id = new SimpleIntegerProperty(id);
+    }
+
     public SimpleStringProperty getName(){ return name; }
 
+    public void setName(String name){
+        this.name = new SimpleStringProperty(name);
+    }
+
     public SimpleStringProperty getEmail(){ return email; }
+
+    public void setEmail(String email){
+        this.email = new SimpleStringProperty(email);
+    }
 }
