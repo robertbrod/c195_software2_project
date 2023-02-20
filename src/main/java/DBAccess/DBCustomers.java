@@ -74,4 +74,94 @@ public class DBCustomers {
             e.printStackTrace();
         }
     }
+
+    public static void updateCustomerName(int id, String name){
+        try{
+            String sql = "UPDATE customers " +
+                         "SET Customer_Name = ? " +
+                         "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, name);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCustomerAddress(int id, String address){
+        try{
+            String sql = "UPDATE customers " +
+                    "SET Address = ? " +
+                    "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, address);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCustomerPostal(int id, String postal){
+        try{
+            String sql = "UPDATE customers " +
+                    "SET Postal_Code = ? " +
+                    "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, postal);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCustomerPhone(int id, String phone){
+        try{
+            String sql = "UPDATE customers " +
+                    "SET Phone = ? " +
+                    "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setString(1, phone);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void updateCustomerDivisionId(int id, int divisionId){
+        try{
+            String sql = "UPDATE customers " +
+                    "SET Division_ID = ? " +
+                    "WHERE Customer_ID = ?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, divisionId);
+            ps.setInt(2, id);
+
+            ps.executeUpdate();
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

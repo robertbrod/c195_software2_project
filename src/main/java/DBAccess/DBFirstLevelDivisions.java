@@ -36,6 +36,32 @@ public class DBFirstLevelDivisions {
         return division;
     }
 
+    public static FirstLevelDivision getDivision(String divisionName){
+        FirstLevelDivision division = null;
+
+        try{
+            String sql = "SELECT * FROM first_level_divisions WHERE Division=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setString(1, divisionName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Division_ID");
+                String name = rs.getString("Division");
+                int countryId = rs.getInt("Country_ID");
+
+                division = new FirstLevelDivision(id, name, countryId);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return division;
+    }
+
     public static ObservableList<FirstLevelDivision> getAllCountryDivisions(int countryId){
         ObservableList<FirstLevelDivision> firstLevelDivisions = FXCollections.observableArrayList();
 

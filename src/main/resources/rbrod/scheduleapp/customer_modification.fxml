@@ -20,7 +20,7 @@
     <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="75.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Customer Information" GridPane.halignment="CENTER">
+      <Label fx:id="headerLabel" text="Customer Information" GridPane.halignment="CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
@@ -76,7 +76,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Name" GridPane.halignment="CENTER" />
+                  <Label fx:id="nameLabel" text="Name" GridPane.halignment="CENTER" />
                   <TextField fx:id="nameField" GridPane.columnIndex="1" />
                </children>
             </GridPane>
@@ -89,7 +89,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Address" GridPane.halignment="CENTER" />
+                  <Label fx:id="addressLabel" text="Address" GridPane.halignment="CENTER" />
                   <TextField fx:id="addressField" GridPane.columnIndex="1" />
                </children>
             </GridPane>
@@ -102,7 +102,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Postal Code" GridPane.halignment="CENTER" />
+                  <Label fx:id="postalLabel" text="Postal Code" GridPane.halignment="CENTER" />
                   <TextField fx:id="postalField" GridPane.columnIndex="1" />
                </children>
             </GridPane>
@@ -115,7 +115,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Phone Number" GridPane.halignment="CENTER" />
+                  <Label fx:id="phoneLabel" text="Phone Number" GridPane.halignment="CENTER" />
                   <TextField fx:id="phoneField" GridPane.columnIndex="1" />
                </children>
             </GridPane>
@@ -128,7 +128,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label text="Country" GridPane.halignment="CENTER" />
+                  <Label fx:id="countryLabel" text="Country" GridPane.halignment="CENTER" />
                   <ComboBox fx:id="countryCombo" onAction="#countryComboAction" prefWidth="150.0" GridPane.columnIndex="1" />
                </children>
             </GridPane>

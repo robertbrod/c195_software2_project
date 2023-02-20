@@ -21,7 +21,7 @@
     <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="72.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Label text="Customer Data" GridPane.halignment="CENTER">
+      <Label fx:id="headerLabel" text="Customer Data" GridPane.halignment="CENTER">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>

@@ -34,7 +34,6 @@ public class CustomerDataController implements Initializable {
     private TableColumn<Customer, String> phoneCol;
     @FXML
     private TableView<Customer> customerDataTable;
-
     @FXML
     private Button addBtn;
     @FXML
@@ -43,6 +42,8 @@ public class CustomerDataController implements Initializable {
     private Button deleteBtn;
     @FXML
     private Button appointmentsBtn;
+    @FXML
+    private Label headerLabel;
 
     public void modifyBtnAction(ActionEvent actionEvent) throws IOException {
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
@@ -88,8 +89,40 @@ public class CustomerDataController implements Initializable {
         stage.show();
     }
 
+    public void setEnglishLabels(){
+        headerLabel.setText("Customer Data");
+
+        nameCol.setText("Name");
+        addressCol.setText("Address");
+        phoneCol.setText("Phone");
+
+        addBtn.setText("Add");
+        modifyBtn.setText("Modify");
+        deleteBtn.setText("Delete");
+        appointmentsBtn.setText("Appointments");
+    }
+
+    public void setFrenchLabels(){
+        headerLabel.setText("Données Client");
+
+        nameCol.setText("Nom");
+        addressCol.setText("Adresse");
+        phoneCol.setText("Téléphone");
+
+        addBtn.setText("Ajouter");
+        modifyBtn.setText("Modifier");
+        deleteBtn.setText("Supprimer");
+        appointmentsBtn.setText("Rendez-vous");
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+            setEnglishLabels();
+        }else{
+            setFrenchLabels();
+        }
+
         idCol.setCellValueFactory(data -> data.getValue().getId());
         nameCol.setCellValueFactory(data -> data.getValue().getName());
         addressCol.setCellValueFactory(data -> data.getValue().getFormattedAddress());
