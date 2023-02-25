@@ -1,13 +1,17 @@
 package Model;
 
+import DBAccess.DBContacts;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+
+import java.time.ZonedDateTime;
 
 public class Appointment {
     private SimpleIntegerProperty id;
     private SimpleStringProperty title;
     private SimpleStringProperty description;
     private SimpleStringProperty location;
+    private Contact contact;
     private SimpleStringProperty type;
     private SimpleStringProperty start;
     private SimpleStringProperty end;
@@ -36,6 +40,7 @@ public class Appointment {
         this.customerId = new SimpleIntegerProperty(customerId);
         this.userId = new SimpleIntegerProperty(userId);
         this.contactId = new SimpleIntegerProperty(contactId);
+        this.contact = DBContacts.getContact(this.contactId.getValue());
     }
 
     public Appointment(int id, String title, String description, String location, String type, String start, String end, int customerId,
@@ -51,6 +56,7 @@ public class Appointment {
         this.customerId = new SimpleIntegerProperty(customerId);
         this.userId = new SimpleIntegerProperty(userId);
         this.contactId = new SimpleIntegerProperty(contactId);
+        this.contact = DBContacts.getContact(this.contactId.getValue());
     }
 
     public SimpleIntegerProperty getId(){ return id; }
@@ -135,5 +141,11 @@ public class Appointment {
 
     public void setContactId(int contactId){
         this.contactId = new SimpleIntegerProperty(contactId);
+    }
+
+    public Contact getContact(){ return contact; }
+
+    public void setContact(Contact contact){
+        this.contact = contact;
     }
 }

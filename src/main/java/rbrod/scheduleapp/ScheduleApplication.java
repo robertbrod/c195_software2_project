@@ -8,18 +8,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.Locale;
 
 
 public class ScheduleApplication extends Application {
 
+    public static ZoneId zoneId = ZonedDateTime.now().getZone();
     public static Language language;
-    public static ZonedDateTime localDateTime = ZonedDateTime.now();
-    public static ZoneId zoneId = localDateTime.getZone();
 
     public enum Language {
         ENGLISH, FRENCH

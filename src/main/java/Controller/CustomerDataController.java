@@ -75,8 +75,18 @@ public class CustomerDataController implements Initializable {
         customerDataTable.setItems(DBCustomers.getAllCustomers());
     }
 
-    public void appointmentsBtnAction(ActionEvent actionEvent){
+    public void appointmentsBtnAction(ActionEvent actionEvent) throws IOException{
+        goToAppointmentsForm(actionEvent);
+    }
 
+    public void goToAppointmentsForm(ActionEvent actionEvent) throws IOException{
+        Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("appointments.fxml"));
+        Scene scene = new Scene(parent);
+
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        stage.setScene(scene);
+        stage.show();
     }
 
     public void goToCustomerModificationForm(ActionEvent actionEvent) throws IOException {
