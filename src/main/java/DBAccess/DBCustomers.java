@@ -40,6 +40,64 @@ public class DBCustomers {
         return allCustomers;
     }
 
+    public static Customer getCustomer(String customerName){
+        Customer customer = null;
+
+        try{
+            String sql = "SELECT * FROM customers WHERE Customer_Name=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setString(1, customerName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postal = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int divisionId = rs.getInt("Division_ID");
+
+                customer = new Customer(id, name, address, postal, phone, divisionId);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
+    public static Customer getCustomer(int customerID){
+        Customer customer = null;
+
+        try{
+            String sql = "SELECT * FROM customers WHERE Customer_ID=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setInt(1, customerID);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Customer_ID");
+                String name = rs.getString("Customer_Name");
+                String address = rs.getString("Address");
+                String postal = rs.getString("Postal_Code");
+                String phone = rs.getString("Phone");
+                int divisionId = rs.getInt("Division_ID");
+
+                customer = new Customer(id, name, address, postal, phone, divisionId);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return customer;
+    }
+
     public static void addCustomer(Customer customer){
         try{
             String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Division_ID) " +

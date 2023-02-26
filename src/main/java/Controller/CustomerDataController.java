@@ -48,11 +48,19 @@ public class CustomerDataController implements Initializable {
     public void modifyBtnAction(ActionEvent actionEvent) throws IOException {
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
 
+        Alert noCustomerSelectedFrench = new Alert(AlertType.ERROR, "Aucun client sélectionné !");
+        noCustomerSelectedFrench.setHeaderText("Erreur!");
+        noCustomerSelectedFrench.setTitle("Erreur!");
+
         if(highlightedCustomer != null){
             CustomerModificationController.passedCustomer = highlightedCustomer;
             goToCustomerModificationForm(actionEvent);
         }else{
-            noCustomerSelected.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                noCustomerSelected.showAndWait();
+            }else{
+                noCustomerSelectedFrench.showAndWait();
+            }
         }
     }
 
@@ -65,11 +73,19 @@ public class CustomerDataController implements Initializable {
     public void deleteBtnAction(ActionEvent actionEvent){
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
 
+        Alert noCustomerSelectedFrench = new Alert(AlertType.ERROR, "Aucun client sélectionné !");
+        noCustomerSelectedFrench.setHeaderText("Erreur!");
+        noCustomerSelectedFrench.setTitle("Erreur!");
+
         if(highlightedCustomer != null){
             DBCustomers.removeCustomer(highlightedCustomer);
             highlightedCustomer = null;
         }else{
-            noCustomerSelected.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                noCustomerSelected.showAndWait();
+            }else{
+                noCustomerSelectedFrench.showAndWait();
+            }
         }
 
         customerDataTable.setItems(DBCustomers.getAllCustomers());

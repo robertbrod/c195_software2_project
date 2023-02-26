@@ -43,6 +43,7 @@ public class Customer {
         this.name = new SimpleStringProperty(name);
         this.address = new SimpleStringProperty(address);
         this.postalCode = new SimpleStringProperty(postalCode);
+
         this.phone = new SimpleStringProperty(phone);
         this.divisionId = new SimpleIntegerProperty(divisionId);
         this.firstLevelDivision = DBFirstLevelDivisions.getDivision(divisionId);

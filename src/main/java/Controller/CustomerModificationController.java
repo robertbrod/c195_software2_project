@@ -119,39 +119,88 @@ public class CustomerModificationController implements Initializable {
         Alert invalidCountrySelection = new Alert(AlertType.ERROR, "Invalid country selection!");
         Alert invalidDivisionSelection = new Alert(AlertType.ERROR, "Invalid state/region selection!");
 
+        Alert invalidNameFieldFrench = new Alert(AlertType.ERROR, "Champ de nom invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+        Alert invalidAddressFieldFrench = new Alert(AlertType.ERROR, "Champ d'adresse invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+        Alert invalidPostalFieldFrench = new Alert(AlertType.ERROR, "Champ de code postal invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+        Alert invalidPhoneFieldFrench = new Alert(AlertType.ERROR, "Champ de numéro de téléphone invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+        Alert invalidCountrySelectionFrench = new Alert(AlertType.ERROR, "Sélection de pays invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+        Alert invalidDivisionSelectionFrench = new Alert(AlertType.ERROR, "Sélection d'état/région invalide !");
+        invalidNameFieldFrench.setHeaderText("Erreur!");
+        invalidNameFieldFrench.setTitle("Erreur!");
+
+
         String name = nameField.getText();
         if(name.equals("")){
-            invalidNameField.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidNameField.showAndWait();
+            }else{
+                invalidNameFieldFrench.showAndWait();
+            }
             return false;
         }
 
         String address = addressField.getText();
         if(address.equals("")){
-            invalidAddressField.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidAddressField.showAndWait();
+            }else{
+                invalidAddressFieldFrench.showAndWait();
+            }
             return false;
         }
 
         String postalCode = postalField.getText();
         if(postalCode.equals("")){
-            invalidPostalField.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidPostalField.showAndWait();
+            }else{
+                invalidPostalFieldFrench.showAndWait();
+            }
             return false;
         }
 
         String phoneNumber = phoneField.getText();
         if(phoneNumber.equals("")){
-            invalidPhoneField.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidPhoneField.showAndWait();
+            }else{
+                invalidPhoneFieldFrench.showAndWait();
+            }
             return false;
         }
 
         String country = countryCombo.getValue();
         if(country.equals("")){
-            invalidCountrySelection.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidCountrySelection.showAndWait();
+            }else{
+                invalidCountrySelectionFrench.showAndWait();
+            }
             return false;
         }
 
         String division = divisionCombo.getValue();
         if(division.equals("")){
-            invalidDivisionSelection.showAndWait();
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidDivisionSelection.showAndWait();
+            }else{
+                invalidDivisionSelectionFrench.showAndWait();
+            }
             return false;
         }
 
@@ -162,8 +211,7 @@ public class CustomerModificationController implements Initializable {
         if(validateData()){
             if(passedCustomer != null){
                 modifyPassedCustomer();
-            }
-            else{
+            } else{
                 createNewCustomer();
             }
 
