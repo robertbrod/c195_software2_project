@@ -1,6 +1,7 @@
 package Controller;
 
 import DBAccess.DBUsers;
+import Helper.TimeHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -64,6 +65,8 @@ public class LoginController implements Initializable {
                 incorrectPasswordFrench.showAndWait();
             }
         }
+
+        ScheduleApplication.user = DBUsers.getUser(username);
     }
 
     public void goToCustomerForm(ActionEvent actionEvent) throws IOException{
@@ -92,7 +95,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        zoneLabel.setText("Zone ID: " + ScheduleApplication.zoneId);
+        zoneLabel.setText("Zone ID: " + TimeHelper.getLocalZoneId());
 
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
             setEnglishLabels();

@@ -24,12 +24,6 @@ public class FirstLevelDivision {
         this.countryId = new SimpleIntegerProperty(countryId);
     }
 
-    public FirstLevelDivision(int id, String division, int countryId){
-        this.id = new SimpleIntegerProperty(id);
-        this.division = new SimpleStringProperty(division);
-        this.countryId = new SimpleIntegerProperty(countryId);
-    }
-
     public SimpleIntegerProperty getId(){ return id; }
 
     public void setId(int id){

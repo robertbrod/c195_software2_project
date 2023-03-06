@@ -26,7 +26,7 @@ public class DBUsers {
                 String name = rs.getString("User_Name");
                 String password = rs.getString("Password");
 
-                User user = new User(id, name, password);
+                User user = new User(id, name, password, null, null, null, null);
                 allUsers.add(user);
             }
 
@@ -53,7 +53,33 @@ public class DBUsers {
                 String name = rs.getString("User_Name");
                 String password = rs.getString("Password");
 
-                user = new User(id, name, password);
+                user = new User(id, name, password, null, null, null, null);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+    public static User getUser(String userName){
+        User user = null;
+
+        try{
+            String sql = "SELECT * FROM users WHERE User_Name=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+            ps.setString(1, userName);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("User_ID");
+                String name = rs.getString("User_Name");
+                String password = rs.getString("Password");
+
+                user = new User(id, name, password, null, null, null, null);
             }
 
         } catch(SQLException e){

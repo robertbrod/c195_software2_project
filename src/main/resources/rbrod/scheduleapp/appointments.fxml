@@ -31,13 +31,13 @@
       <TableView fx:id="appointmentsTable" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
         <columns>
           <TableColumn fx:id="idCol" prefWidth="22.0" resizable="false" text="ID" />
-          <TableColumn fx:id="titleCol" prefWidth="89.0" resizable="false" text="Title" />
-            <TableColumn fx:id="descriptionCol" prefWidth="106.0" resizable="false" text="Description" />
-            <TableColumn fx:id="locationCol" prefWidth="99.0" resizable="false" text="Location" />
-            <TableColumn fx:id="contactCol" prefWidth="106.0" resizable="false" text="Contact" />
-            <TableColumn fx:id="typeCol" prefWidth="68.0" resizable="false" text="Type" />
-            <TableColumn fx:id="startCol" prefWidth="81.0" resizable="false" text="Start" />
-            <TableColumn fx:id="endCol" prefWidth="84.0" resizable="false" text="End" />
+          <TableColumn fx:id="titleCol" prefWidth="60.0" resizable="false" text="Title" />
+            <TableColumn fx:id="descriptionCol" prefWidth="85.0" resizable="false" text="Description" />
+            <TableColumn fx:id="locationCol" prefWidth="85.0" resizable="false" text="Location" />
+            <TableColumn fx:id="contactCol" prefWidth="85.0" resizable="false" text="Contact" />
+            <TableColumn fx:id="typeCol" prefWidth="85.0" resizable="false" text="Type" />
+            <TableColumn fx:id="startCol" prefWidth="120.0" resizable="false" text="Start" />
+            <TableColumn fx:id="endCol" prefWidth="120.0" resizable="false" text="End" />
             <TableColumn fx:id="customerIdCol" prefWidth="48.0" resizable="false" text="Cust ID" />
             <TableColumn fx:id="userIdCol" prefWidth="47.0" resizable="false" text="User ID" />
         </columns>

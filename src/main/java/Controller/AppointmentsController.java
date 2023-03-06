@@ -1,7 +1,9 @@
 package Controller;
 
 import DBAccess.DBAppointments;
+import Helper.TimeHelper;
 import Model.Appointment;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,6 +17,8 @@ import rbrod.scheduleapp.ScheduleApplication;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AppointmentsController implements Initializable {
@@ -91,7 +95,23 @@ public class AppointmentsController implements Initializable {
 
         if(highlightedAppointment != null){
             DBAppointments.removeAppointment(highlightedAppointment);
+            int id = highlightedAppointment.getId().getValue();
+            String type = highlightedAppointment.getType().getValue();
             highlightedAppointment = null;
+
+            Alert appointmentCanceled = new Alert(Alert.AlertType.INFORMATION, "ID: " + id + "\nType: " + type);
+            appointmentCanceled.setHeaderText("Appointment Canceled!");
+            appointmentCanceled.setTitle("Cancellation!");
+
+            Alert appointmentCanceledFrench = new Alert(Alert.AlertType.INFORMATION, "ID: " + id + "\nTaper: " + type);
+            appointmentCanceledFrench.setHeaderText("Rendez-vous annulé !");
+            appointmentCanceledFrench.setTitle("Annulation!");
+
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                appointmentCanceled.showAndWait();
+            }else{
+                appointmentCanceledFrench.showAndWait();
+            }
         }else{
             if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
                 noAppointmentSelected.showAndWait();
@@ -108,10 +128,12 @@ public class AppointmentsController implements Initializable {
     }
 
     public void monthlyRadioAction(ActionEvent actionEvent){
+        appointmentsTable.setItems(DBAppointments.getMonthlyAppointments());
         weeklyRadio.setSelected(false);
     }
 
     public void weeklyRadioAction(ActionEvent actionEvent){
+        appointmentsTable.setItems(DBAppointments.getWeeklyAppointments());
         monthlyRadio.setSelected(false);
     }
 
@@ -197,15 +219,29 @@ public class AppointmentsController implements Initializable {
         locationCol.setCellValueFactory(data -> data.getValue().getLocation());
         contactCol.setCellValueFactory(data -> data.getValue().getContact().getName());
         typeCol.setCellValueFactory(data -> data.getValue().getType());
-        startCol.setCellValueFactory(data -> data.getValue().getStart());
-        endCol.setCellValueFactory(data -> data.getValue().getEnd());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm a MM/dd");
+
+        startCol.setCellValueFactory(data -> {
+            ZonedDateTime startUTC = data.getValue().getStart();
+            ZonedDateTime localStart = TimeHelper.convertUTCToLocal(startUTC);
+            return new SimpleStringProperty(localStart.format(formatter));
+        });
+
+        endCol.setCellValueFactory(data -> {
+            ZonedDateTime endUTC = data.getValue().getEnd();
+            ZonedDateTime localEnd = TimeHelper.convertUTCToLocal(endUTC);
+            return new SimpleStringProperty(localEnd.format(formatter));
+        });
+
         customerIdCol.setCellValueFactory(data -> data.getValue().getCustomerId());
         userIdCol.setCellValueFactory(data -> data.getValue().getUserId());
 
-        appointmentsTable.setItems(DBAppointments.getAllAppointments());
+        appointmentsTable.setItems(DBAppointments.getMonthlyAppointments());
 
         appointmentsTable.setOnMouseClicked(mouseEvent ->{
             try{
+
                 Node node = ((Node)mouseEvent.getTarget()).getParent();
                 TableRow row;
 

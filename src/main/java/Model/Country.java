@@ -20,11 +20,6 @@ public class Country {
         this.lastUpdatedBy = new SimpleStringProperty(lastUpdatedBy);
     }
 
-    public Country(int id, String name){
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-    }
-
     public SimpleIntegerProperty getId(){
         return id;
     }

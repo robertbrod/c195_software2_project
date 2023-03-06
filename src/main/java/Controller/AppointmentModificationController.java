@@ -4,6 +4,7 @@ import DBAccess.DBAppointments;
 import DBAccess.DBContacts;
 import DBAccess.DBCustomers;
 import DBAccess.DBUsers;
+import Helper.TimeHelper;
 import Model.Appointment;
 import Model.Contact;
 import Model.Customer;
@@ -22,6 +23,9 @@ import rbrod.scheduleapp.ScheduleApplication;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AppointmentModificationController implements Initializable {
@@ -95,8 +99,18 @@ public class AppointmentModificationController implements Initializable {
         descriptionField.setText(passedAppointment.getDescription().getValue());
         locationField.setText(passedAppointment.getLocation().getValue());
         typeField.setText(passedAppointment.getType().getValue());
-        startField.setText(passedAppointment.getStart().getValue());
-        endField.setText(passedAppointment.getEnd().getValue());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        ZonedDateTime start = passedAppointment.getStart();
+        ZonedDateTime localStart = start.withZoneSameInstant(TimeHelper.getLocalZoneId());
+        String localStartStr = localStart.format(formatter);
+        startField.setText(localStartStr);
+
+        ZonedDateTime end = passedAppointment.getEnd();
+        ZonedDateTime localEnd = end.withZoneSameInstant(TimeHelper.getLocalZoneId());
+        String localEndStr = localEnd.format(formatter);
+        endField.setText(localEndStr);
 
         contactCombo.setValue(passedAppointment.getContact().getName().getValue());
         customerIdCombo.setValue(Integer.toString(passedAppointment.getCustomerId().getValue()));
@@ -109,11 +123,22 @@ public class AppointmentModificationController implements Initializable {
         String description = descriptionField.getText();
         String location = locationField.getText();
         String type = typeField.getText();
-        String start = startField.getText();
-        String end = endField.getText();
 
-        Contact contact = DBContacts.getContact(contactCombo.getValue());
-        int contactId = contact.getId().getValue();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String startTimeStr = startField.getText();
+        LocalDateTime startLocalTime = LocalDateTime.parse(startTimeStr, formatter);
+        ZonedDateTime startZonedTime = ZonedDateTime.of(startLocalTime, TimeHelper.getLocalZoneId());
+        ZonedDateTime adjustedStartTime = TimeHelper.convertLocalToUTC(startZonedTime);
+        String adjustedStartTimeStr = adjustedStartTime.format(formatter);
+
+        String endTimeStr = endField.getText();
+        LocalDateTime endLocalTime = LocalDateTime.parse(endTimeStr, formatter);
+        ZonedDateTime zonedEndTime = ZonedDateTime.of(endLocalTime, TimeHelper.getLocalZoneId());
+        ZonedDateTime adjustedEndTime = TimeHelper.convertLocalToUTC(zonedEndTime);
+        String adjustedEndTimeStr = adjustedEndTime.format(formatter);
+
+        int contactId = passedAppointment.getContact().getId().getValue();
 
         Customer customer = DBCustomers.getCustomer(Integer.parseInt(customerIdCombo.getValue()));
         int customerId = customer.getId().getValue();
@@ -125,8 +150,8 @@ public class AppointmentModificationController implements Initializable {
         DBAppointments.updateAppointmentDescription(id, description);
         DBAppointments.updateAppointmentLocation(id, location);
         DBAppointments.updateAppointmentType(id, type);
-        DBAppointments.updateAppointmentStart(id, start);
-        DBAppointments.updateAppointmentEnd(id, end);
+        DBAppointments.updateAppointmentStart(id, adjustedStartTimeStr);
+        DBAppointments.updateAppointmentEnd(id, adjustedEndTimeStr);
         DBAppointments.updateAppointmentContactId(id, contactId);
         DBAppointments.updateAppointmentCustomerId(id, customerId);
         DBAppointments.updateAppointmentUserId(id, userId);
@@ -137,8 +162,18 @@ public class AppointmentModificationController implements Initializable {
         String description = descriptionField.getText();
         String location = locationField.getText();
         String type = typeField.getText();
-        String start = startField.getText();
-        String end = endField.getText();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String startTimeStr = startField.getText();
+        LocalDateTime startLocalTime = LocalDateTime.parse(startTimeStr, formatter);
+        ZonedDateTime zonedStartTime = ZonedDateTime.of(startLocalTime, TimeHelper.getLocalZoneId());
+        ZonedDateTime adjustedStartTime = zonedStartTime.withZoneSameInstant(ZoneId.of("UTC"));
+
+        String endTimeStr = endField.getText();
+        LocalDateTime endLocalTime = LocalDateTime.parse(endTimeStr, formatter);
+        ZonedDateTime zonedEndTime = ZonedDateTime.of(endLocalTime, TimeHelper.getLocalZoneId());
+        ZonedDateTime adjustedEndTime = zonedEndTime.withZoneSameInstant(ZoneId.of("UTC"));
 
         Contact contact = DBContacts.getContact(contactCombo.getValue());
         int contactId = contact.getId().getValue();
@@ -149,7 +184,8 @@ public class AppointmentModificationController implements Initializable {
         User user = DBUsers.getUser(Integer.parseInt(userIdCombo.getValue()));
         int userId = user.getId().getValue();
 
-        Appointment appointment = new Appointment(-1, title, description, location, type, start, end, customerId, userId, contactId);
+        Appointment appointment = new Appointment(-1, title, description, location, type, adjustedStartTime, adjustedEndTime, null,
+                                             null, null, null, customerId, userId, contactId);
         DBAppointments.addAppointment(appointment);
     }
 
@@ -159,7 +195,10 @@ public class AppointmentModificationController implements Initializable {
         Alert invalidLocationField = new Alert(AlertType.ERROR, "Invalid location field!");
         Alert invalidTypeField = new Alert(AlertType.ERROR, "Invalid type field!");
         Alert invalidStartField = new Alert(AlertType.ERROR, "Invalid start field!");
+        Alert startOutsideHours = new Alert(AlertType.ERROR, "Start time outside business hours!");
         Alert invalidEndField = new Alert(AlertType.ERROR, "Invalid end field!");
+        Alert endOutsideHours = new Alert(AlertType.ERROR, "End time outside business hours!");
+        Alert appointmentOverlap = new Alert(AlertType.ERROR, "This appointment overlaps another!");
         Alert invalidContactSelection = new Alert(AlertType.ERROR, "Invalid contact selection!");
         Alert invalidCustomerIdSelection = new Alert(AlertType.ERROR, "Invalid customer ID selection!");
         Alert invalidUserIdSelection = new Alert(AlertType.ERROR, "Invalid user ID selection!");
@@ -184,9 +223,21 @@ public class AppointmentModificationController implements Initializable {
         invalidStartFieldFrench.setHeaderText("Erreur!");
         invalidStartFieldFrench.setTitle("Erreur!");
 
+        Alert startOutsideHoursFrench = new Alert(AlertType.ERROR, "Heure de début en dehors des heures d'ouverture!");
+        invalidStartFieldFrench.setHeaderText("Erreur!");
+        invalidStartFieldFrench.setTitle("Erreur!");
+
         Alert invalidEndFieldFrench = new Alert(AlertType.ERROR, "Champ de fin invalide !");
         invalidEndFieldFrench.setHeaderText("Erreur!");
         invalidEndFieldFrench.setTitle("Erreur!");
+
+        Alert endOutsideHoursFrench = new Alert(AlertType.ERROR, "Heure de fin en dehors des heures d'ouverture !");
+        invalidStartFieldFrench.setHeaderText("Erreur!");
+        invalidStartFieldFrench.setTitle("Erreur!");
+
+        Alert appointmentOverlapFrench = new Alert(AlertType.ERROR, "Ce rendez-vous en chevauche un autre !");
+        invalidTitleFieldFrench.setHeaderText("Erreur!");
+        invalidTitleFieldFrench.setTitle("Erreur!");
 
         Alert invalidContactSelectionFrench = new Alert(AlertType.ERROR, "Sélection de contact invalide !");
         invalidContactSelectionFrench.setHeaderText("Erreur!");
@@ -240,7 +291,9 @@ public class AppointmentModificationController implements Initializable {
             return false;
         }
 
-        String start = typeField.getText();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String start = startField.getText();
         if(start.equals("")){
             if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
                 invalidStartField.showAndWait();
@@ -249,9 +302,109 @@ public class AppointmentModificationController implements Initializable {
             }
             return false;
         }
+        try{
+            LocalDateTime localStart = LocalDateTime.parse(start, formatter);
+            ZonedDateTime zonedStart = ZonedDateTime.of(localStart, TimeHelper.getLocalZoneId());
+            ZonedDateTime estStart = TimeHelper.convertLocalToEST(zonedStart);
+            LocalDate startDate = zonedStart.toLocalDate();
+            LocalTime estStartTime = estStart.toLocalTime();
+            LocalTime startOfDay = LocalTime.of(8, 0);
+            LocalTime endOfDay = LocalTime.of(22, 0);
 
-        String end = typeField.getText();
+            if(estStartTime.isBefore(startOfDay) || estStartTime.isAfter(endOfDay)){
+                if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                    startOutsideHours.showAndWait();
+                    return false;
+                }else{
+                    startOutsideHoursFrench.showAndWait();
+                    return false;
+                }
+            }
+
+            for(Appointment appointment : DBAppointments.getAllAppointments()){
+                LocalDate apptDate = appointment.getStart().toLocalDate();
+
+                ZonedDateTime apptStart = appointment.getStart();
+                ZonedDateTime apptStartEST = TimeHelper.convertLocalToEST(apptStart);
+                LocalTime apptStartTimeEst = apptStartEST.toLocalTime();
+
+                ZonedDateTime apptEnd = appointment.getEnd();
+                ZonedDateTime apptEndEST = TimeHelper.convertLocalToEST(apptEnd);
+                LocalTime apptEndTimeEst = apptEndEST.toLocalTime();
+
+                if(startDate.equals(apptDate)){
+                    if((estStartTime.isAfter(apptStartTimeEst) && estStartTime.isBefore(apptEndTimeEst))){
+                        if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                            appointmentOverlap.showAndWait();
+                            return false;
+                        }else{
+                            appointmentOverlapFrench.showAndWait();
+                            return false;
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidStartField.showAndWait();
+            }else{
+                invalidStartFieldFrench.showAndWait();
+            }
+            return false;
+        }
+
+        String end = endField.getText();
         if(end.equals("")){
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                invalidEndField.showAndWait();
+            }else{
+                invalidEndFieldFrench.showAndWait();
+            }
+            return false;
+        }
+        try{
+            LocalDateTime localEnd = LocalDateTime.parse(end, formatter);
+            ZonedDateTime zonedEnd = ZonedDateTime.of(localEnd, TimeHelper.getLocalZoneId());
+            ZonedDateTime estEnd = TimeHelper.convertLocalToEST(zonedEnd);
+            LocalDate endDate = zonedEnd.toLocalDate();
+            LocalTime estEndTime = estEnd.toLocalTime();
+            LocalTime startOfDay = LocalTime.of(8, 0);
+            LocalTime endOfDay = LocalTime.of(22, 0);
+
+            if(estEndTime.isBefore(startOfDay) || estEndTime.isAfter(endOfDay)){
+                if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                    endOutsideHours.showAndWait();
+                    return false;
+                }else{
+                    endOutsideHoursFrench.showAndWait();
+                    return false;
+                }
+            }
+
+            for(Appointment appointment : DBAppointments.getAllAppointments()){
+                LocalDate apptDate = appointment.getEnd().toLocalDate();
+
+                ZonedDateTime apptStart = appointment.getStart();
+                ZonedDateTime apptStartEST = TimeHelper.convertLocalToEST(apptStart);
+                LocalTime apptStartTimeEst = apptStartEST.toLocalTime();
+
+                ZonedDateTime apptEnd = appointment.getEnd();
+                ZonedDateTime apptEndEST = TimeHelper.convertLocalToEST(apptEnd);
+                LocalTime apptEndTimeEst = apptEndEST.toLocalTime();
+
+                if(endDate.equals(apptDate)){
+                    if((estEndTime.isAfter(apptStartTimeEst) && estEndTime.isBefore(apptEndTimeEst))){
+                        if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                            appointmentOverlap.showAndWait();
+                            return false;
+                        }else{
+                            appointmentOverlapFrench.showAndWait();
+                            return false;
+                        }
+                    }
+                }
+            }
+        }catch(Exception e){
             if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
                 invalidEndField.showAndWait();
             }else{

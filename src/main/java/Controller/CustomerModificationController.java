@@ -107,7 +107,7 @@ public class CustomerModificationController implements Initializable {
         FirstLevelDivision division = DBFirstLevelDivisions.getDivision(divisionCombo.getValue());
         int divisionId = division.getId().getValue();
 
-        Customer customer = new Customer(-1, name, address, postal, phone, divisionId);
+        Customer customer = new Customer(-1, name, address, postal, phone, null, null, null, null, divisionId);
         DBCustomers.addCustomer(customer);
     }
 

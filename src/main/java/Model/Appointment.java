@@ -11,48 +11,32 @@ public class Appointment {
     private SimpleStringProperty title;
     private SimpleStringProperty description;
     private SimpleStringProperty location;
-    private Contact contact;
     private SimpleStringProperty type;
-    private SimpleStringProperty start;
-    private SimpleStringProperty end;
-    private SimpleStringProperty createDate;
+    private ZonedDateTime start;
+    private ZonedDateTime end;
+    private ZonedDateTime createDate;
     private SimpleStringProperty createdBy;
-    private SimpleStringProperty lastUpdate;
+    private ZonedDateTime lastUpdate;
     private SimpleStringProperty lastUpdatedBy;
     private SimpleIntegerProperty customerId;
     private SimpleIntegerProperty userId;
     private SimpleIntegerProperty contactId;
+    private Contact contact;
 
-    public Appointment(int id, String title, String description, String location, String type, String start, String end, String createDate,
-                       String createdBy, String lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId){
+    public Appointment(int id, String title, String description, String location, String type, ZonedDateTime start, ZonedDateTime end, ZonedDateTime createDate,
+                       String createdBy, ZonedDateTime lastUpdate, String lastUpdatedBy, int customerId, int userId, int contactId){
 
         this.id = new SimpleIntegerProperty(id);
         this.title = new SimpleStringProperty(title);
         this.description = new SimpleStringProperty(description);
         this.location = new SimpleStringProperty(location);
         this.type = new SimpleStringProperty(type);
-        this.start = new SimpleStringProperty(start);
-        this.end = new SimpleStringProperty(end);
-        this.createDate = new SimpleStringProperty(createDate);
+        this.start = start;
+        this.end = end;
+        this.createDate = createDate;
         this.createdBy = new SimpleStringProperty(createdBy);
-        this.lastUpdate = new SimpleStringProperty(lastUpdate);
+        this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = new SimpleStringProperty(lastUpdatedBy);
-        this.customerId = new SimpleIntegerProperty(customerId);
-        this.userId = new SimpleIntegerProperty(userId);
-        this.contactId = new SimpleIntegerProperty(contactId);
-        this.contact = DBContacts.getContact(this.contactId.getValue());
-    }
-
-    public Appointment(int id, String title, String description, String location, String type, String start, String end, int customerId,
-                       int userId, int contactId){
-
-        this.id = new SimpleIntegerProperty(id);
-        this.title = new SimpleStringProperty(title);
-        this.description = new SimpleStringProperty(description);
-        this.location = new SimpleStringProperty(location);
-        this.type = new SimpleStringProperty(type);
-        this.start = new SimpleStringProperty(start);
-        this.end = new SimpleStringProperty(end);
         this.customerId = new SimpleIntegerProperty(customerId);
         this.userId = new SimpleIntegerProperty(userId);
         this.contactId = new SimpleIntegerProperty(contactId);
@@ -89,22 +73,22 @@ public class Appointment {
         this.type = new SimpleStringProperty(type);
     }
 
-    public SimpleStringProperty getStart(){ return start; }
+    public ZonedDateTime getStart(){ return start; }
 
-    public void setStart(String start){
-        this.start = new SimpleStringProperty(start);
+    public void setStart(ZonedDateTime start){
+        this.start = start;
     }
 
-    public SimpleStringProperty getEnd(){ return end; }
+    public ZonedDateTime getEnd(){ return end; }
 
-    public void setEnd(String end){
-        this.end = new SimpleStringProperty(end);
+    public void setEnd(ZonedDateTime end){
+        this.end = end;
     }
 
-    public SimpleStringProperty getCreateDate(){ return createDate; }
+    public ZonedDateTime getCreateDate(){ return createDate; }
 
-    public void setCreateDate(String createDate){
-        this.createDate = new SimpleStringProperty(createDate);
+    public void setCreateDate(ZonedDateTime createDate){
+        this.createDate = createDate;
     }
 
     public SimpleStringProperty getCreatedBy(){ return createdBy; }
@@ -113,10 +97,10 @@ public class Appointment {
         this.createdBy = new SimpleStringProperty(createdBy);
     }
 
-    public SimpleStringProperty getLastUpdate(){ return lastUpdate; }
+    public ZonedDateTime getLastUpdate(){ return lastUpdate; }
 
-    public void setLastUpdate(String lastUpdate){
-        this.lastUpdate = new SimpleStringProperty(lastUpdate);
+    public void setLastUpdate(ZonedDateTime lastUpdate){
+        this.lastUpdate = lastUpdate;
     }
 
     public SimpleStringProperty getLastUpdatedBy(){ return lastUpdatedBy; }

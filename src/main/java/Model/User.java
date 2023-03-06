@@ -22,12 +22,6 @@ public class User {
         this.lastUpdatedBy = new SimpleStringProperty(lastUpdatedBy);
     }
 
-    public User(int id, String name, String password){
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.password = new SimpleStringProperty(password);
-    }
-
     public SimpleIntegerProperty getId(){ return id; }
 
     public void setId(int id){

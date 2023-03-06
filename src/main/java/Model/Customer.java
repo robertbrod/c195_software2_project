@@ -5,46 +5,35 @@ import DBAccess.DBFirstLevelDivisions;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.time.ZonedDateTime;
+
 public class Customer {
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;
     private SimpleStringProperty address;
     private SimpleStringProperty postalCode;
     private SimpleStringProperty phone;
-    private SimpleStringProperty createDate;
+    private ZonedDateTime createDate;
     private SimpleStringProperty createdBy;
-    private SimpleStringProperty lastUpdate;
+    private ZonedDateTime lastUpdate;
     private SimpleStringProperty lastUpdatedBy;
     private SimpleIntegerProperty divisionId;
     private FirstLevelDivision firstLevelDivision;
     private Country country;
     private SimpleStringProperty formattedAddress;
 
-    public Customer(int id, String name, String address, String postalCode, String phone, String createDate, String createdBy,
-                    String lastUpdate, String lastUpdatedBy, int divisionId){
+    public Customer(int id, String name, String address, String postalCode, String phone, ZonedDateTime createDate, String createdBy,
+                    ZonedDateTime lastUpdate, String lastUpdatedBy, int divisionId){
 
         this.id = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
         this.address = new SimpleStringProperty(address);
         this.postalCode = new SimpleStringProperty(postalCode);
         this.phone = new SimpleStringProperty(phone);
-        this.createDate = new SimpleStringProperty(createDate);
+        this.createDate = createDate;
         this.createdBy = new SimpleStringProperty(createdBy);
-        this.lastUpdate = new SimpleStringProperty(lastUpdate);
+        this.lastUpdate = lastUpdate;
         this.lastUpdatedBy = new SimpleStringProperty(lastUpdatedBy);
-        this.divisionId = new SimpleIntegerProperty(divisionId);
-        this.firstLevelDivision = DBFirstLevelDivisions.getDivision(divisionId);
-        this.country = DBCountries.getCountry(this.firstLevelDivision.getCountryId().getValue());
-        setFormattedAddress();
-    }
-
-    public Customer(int id, String name, String address, String postalCode, String phone, int divisionId){
-        this.id = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
-        this.address = new SimpleStringProperty(address);
-        this.postalCode = new SimpleStringProperty(postalCode);
-
-        this.phone = new SimpleStringProperty(phone);
         this.divisionId = new SimpleIntegerProperty(divisionId);
         this.firstLevelDivision = DBFirstLevelDivisions.getDivision(divisionId);
         this.country = DBCountries.getCountry(this.firstLevelDivision.getCountryId().getValue());
@@ -86,10 +75,10 @@ public class Customer {
         this.phone = new SimpleStringProperty(phone);
     }
 
-    public SimpleStringProperty getCreateDate(){ return createDate; }
+    public ZonedDateTime getCreateDate(){ return createDate; }
 
-    public void setCreateDate(String createDate){
-        this.createDate = new SimpleStringProperty(createDate);
+    public void setCreateDate(ZonedDateTime createDate){
+        this.createDate = createDate;
     }
 
     public SimpleStringProperty getCreatedBy(){ return createdBy; }
@@ -98,10 +87,10 @@ public class Customer {
         this.createdBy = new SimpleStringProperty(createdBy);
     }
 
-    public SimpleStringProperty getLastUpdate(){ return lastUpdate; }
+    public ZonedDateTime getLastUpdate(){ return lastUpdate; }
 
-    public void setLastUpdate(String lastUpdate){
-        this.lastUpdate = new SimpleStringProperty(lastUpdate);
+    public void setLastUpdate(ZonedDateTime lastUpdate){
+        this.lastUpdate = lastUpdate;
     }
 
     public SimpleStringProperty getLastUpdatedBy(){ return lastUpdatedBy; }

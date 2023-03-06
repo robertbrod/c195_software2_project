@@ -25,7 +25,7 @@ public class DBCountries {
             while(rs.next()){
                 int id = rs.getInt("Country_ID");
                 String name = rs.getString("Country");
-                country = new Country(id, name);
+                country = new Country(id, name, null, null, null, null);
             }
 
         } catch(SQLException e){
@@ -49,7 +49,7 @@ public class DBCountries {
             while(rs.next()){
                 int id = rs.getInt("Country_ID");
                 String name = rs.getString("Country");
-                country = new Country(id, name);
+                country = new Country(id, name, null, null, null, null);
             }
         } catch(SQLException e){
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class DBCountries {
                 int id = rs.getInt("Country_ID");
                 String name = rs.getString("Country");
 
-                Country country = new Country(id, name);
+                Country country = new Country(id, name, null, null, null, null);
                 countries.add(country);
             }
 
