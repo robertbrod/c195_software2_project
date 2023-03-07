@@ -20,6 +20,7 @@ import rbrod.scheduleapp.ScheduleApplication;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Time;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -195,23 +196,25 @@ public class CustomerDataController implements Initializable {
 
         for(Appointment appointment : DBAppointments.getAllAppointments()){
             ZonedDateTime apptStart = appointment.getStart();
-            LocalTime apptStartTimeLocal = TimeHelper.convertUTCToLocal(apptStart).toLocalTime();
-            LocalDate apptDate = appointment.getStart().toLocalDate();
+            ZonedDateTime localApptStart = TimeHelper.convertESTToLocal(apptStart);
+            LocalTime apptStartTime = localApptStart.toLocalTime();
+            LocalDate apptDate = localApptStart.toLocalDate();
             int id = appointment.getId().getValue();
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd");
             DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
-            Alert upcomingAppointment = new Alert(AlertType.INFORMATION, "ID: " + id + "\nDate: " + apptDate.format(dateFormatter) + "\nTime: " + apptStartTimeLocal.format(timeFormatter));
+            Alert upcomingAppointment = new Alert(AlertType.INFORMATION, "ID: " + id + "\nDate: " + apptDate.format(dateFormatter) + "\nTime: " + apptStartTime.format(timeFormatter));
             upcomingAppointment.setTitle("Appointments!");
             upcomingAppointment.setHeaderText("Upcoming appointment!");
 
-            Alert upcomingAppointmentFrench = new Alert(AlertType.INFORMATION, "ID: " + id + "\nDate: " + apptDate.format(dateFormatter) + "\nTemps: " + apptStartTimeLocal.format(timeFormatter));
+            Alert upcomingAppointmentFrench = new Alert(AlertType.INFORMATION, "ID: " + id + "\nDate: " + apptDate.format(dateFormatter) + "\nTemps: " + apptStartTime.format(timeFormatter));
             upcomingAppointmentFrench.setTitle("Rendez-vous !");
             upcomingAppointmentFrench.setHeaderText("Rendez-vous à venir !");
 
             if(localDate.equals(apptDate)){
-                if(localTime.until(apptStartTimeLocal, ChronoUnit.MINUTES) <= 15){
+                if(localTime.until(apptStartTime, ChronoUnit.MINUTES) <= 15 && localTime.until(apptStartTime, ChronoUnit.MINUTES) >= 0){
+                    System.out.println(localTime.until(apptStartTime, ChronoUnit.MINUTES));
                     if (ScheduleApplication.language == ScheduleApplication.Language.ENGLISH) {
                         upcomingAppointment.showAndWait();
                         return;

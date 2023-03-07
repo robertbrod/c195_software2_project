@@ -162,6 +162,82 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    public static ObservableList<Appointment> getAllContactAppointments(int contId){
+        ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+
+        try{
+            String sql = "SELECT * FROM appointments WHERE Contact_ID=?";
+
+            PreparedStatement ps = JDBC.getConnection().prepareStatement(sql);
+
+            ps.setInt(1, contId);
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                int id = rs.getInt("Appointment_ID");
+                String title = rs.getString("Title");
+                String description = rs.getString("Description");
+                String location = rs.getString("Location");
+                String type = rs.getString("Type");
+
+                ZonedDateTime zonedStartTime;
+                try{
+                    LocalDate localStartDate = rs.getDate("Start").toLocalDate();
+                    LocalTime localStartTime = rs.getTime("Start").toLocalTime();
+                    zonedStartTime = ZonedDateTime.of(localStartDate, localStartTime, ZoneId.of("UTC"));
+                } catch(Exception e){
+                    zonedStartTime = null;
+                }
+
+                ZonedDateTime zonedEndTime;
+                try{
+                    LocalDate localEndDate = rs.getDate("End").toLocalDate();
+                    LocalTime localEndTime = rs.getTime("End").toLocalTime();
+                    zonedEndTime = ZonedDateTime.of(localEndDate, localEndTime, ZoneId.of("UTC"));
+                } catch(Exception e){
+                    zonedEndTime = null;
+                }
+
+                ZonedDateTime zonedCreateTime;
+                try{
+                    LocalDate localCreateDate = rs.getDate("Create_Date").toLocalDate();
+                    LocalTime localCreateTime = rs.getTime("Create_Date").toLocalTime();
+                    zonedCreateTime = ZonedDateTime.of(localCreateDate, localCreateTime, ZoneId.of("UTC"));
+                } catch(Exception e){
+                    zonedCreateTime = null;
+                }
+
+
+                String createdBy = rs.getString("Created_By");
+
+                ZonedDateTime zonedUpdateTime;
+                try{
+                    LocalDate localUpdateDate = rs.getDate("Last_Update").toLocalDate();
+                    LocalTime localUpdateTime = rs.getTime("Last_Update").toLocalTime();
+                    zonedUpdateTime = ZonedDateTime.of(localUpdateDate, localUpdateTime, ZoneId.of("UTC"));
+                } catch(Exception e){
+                    zonedUpdateTime = null;
+                }
+
+                String updatedBy = rs.getString("Last_Updated_By");
+                int customerId = rs.getInt("Customer_ID");
+                int userId = rs.getInt("User_ID");
+                int contactId = rs.getInt("Contact_ID");
+
+                Appointment appointment = new Appointment(id, title, description, location, type, zonedStartTime, zonedEndTime, zonedCreateTime,
+                        createdBy, zonedUpdateTime, updatedBy, customerId, userId, contactId);
+
+                allAppointments.add(appointment);
+            }
+
+        } catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return allAppointments;
+    }
+
     public static ObservableList<Appointment> getWeeklyAppointments(){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 

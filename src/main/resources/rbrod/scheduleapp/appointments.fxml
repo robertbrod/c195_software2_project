@@ -73,6 +73,11 @@
          <children>
             <RadioButton fx:id="monthlyRadio" mnemonicParsing="false" onAction="#monthlyRadioAction" text="Monthly View" GridPane.halignment="CENTER" />
             <RadioButton fx:id="weeklyRadio" mnemonicParsing="false" onAction="#weeklyRadioAction" text="Weekly View" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Button fx:id="reportsBtn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#reportsBtnAction" prefHeight="40.0" prefWidth="150.0" text="Reports" GridPane.columnIndex="2" GridPane.halignment="RIGHT">
+               <GridPane.margin>
+                  <Insets right="25.0" />
+               </GridPane.margin>
+            </Button>
          </children>
       </GridPane>
    </children>

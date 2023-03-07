@@ -60,6 +60,12 @@ public class AppointmentsController implements Initializable {
     private Button deleteBtn;
     @FXML
     private Button customersBtn;
+    @FXML
+    private Button reportsBtn;
+
+    public void reportsBtnAction(ActionEvent actionEvent) throws IOException{
+        goToReportsForm(actionEvent);
+    }
 
     public void addBtnAction(ActionEvent actionEvent) throws IOException{
         highlightedAppointment = null;
@@ -139,6 +145,16 @@ public class AppointmentsController implements Initializable {
 
     public void goToAppointmentModificationForm(ActionEvent actionEvent) throws IOException {
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("appointment_modification.fxml"));
+        Scene scene = new Scene(parent);
+
+        Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();
+
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void goToReportsForm(ActionEvent actionEvent) throws IOException{
+        Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("reports.fxml"));
         Scene scene = new Scene(parent);
 
         Stage stage = (Stage)((Node)actionEvent.getSource()).getScene().getWindow();

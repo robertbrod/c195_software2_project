@@ -12,6 +12,10 @@ public class TimeHelper {
         return utcZonedDateTime.withZoneSameInstant(getLocalZoneId());
     }
 
+    public static ZonedDateTime convertESTToLocal(ZonedDateTime estZonedDateTime){
+        return estZonedDateTime.withZoneSameInstant(getLocalZoneId());
+    }
+
     public static ZonedDateTime convertLocalToUTC(ZonedDateTime localZonedDateTime){
         return localZonedDateTime.withZoneSameInstant(ZoneId.of("UTC"));
     }
