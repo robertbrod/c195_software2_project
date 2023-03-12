@@ -9,8 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * DBCountries is used for CRUD operations within the 'countries' database table.
+ *
+ * @author Robert Brod
+ */
 public class DBCountries {
 
+    /**
+     * Populates and returns Country Object with row in 'countries' database table with matching Country ID.
+     *
+     * @param countryId Country ID
+     * @return          Object containing row data
+     */
     public static Country getCountry(int countryId){
         Country country = null;
 
@@ -35,6 +46,12 @@ public class DBCountries {
         return country;
     }
 
+    /**
+     * Populates and returns Country Object with row in 'countries' database table with matching Country Name.
+     *
+     * @param countryName Country Name
+     * @return            Object containing row data
+     */
     public static Country getCountry(String countryName){
         Country country = null;
 
@@ -58,6 +75,12 @@ public class DBCountries {
         return country;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'countries' database table. Country object is created for each
+     * row for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing row data.
+     */
     public static ObservableList<Country> getAllCountries(){
         ObservableList<Country> countries = FXCollections.observableArrayList();
 

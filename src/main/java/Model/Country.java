@@ -3,6 +3,11 @@ package Model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * Country class used to store, modify, and retrieve Country data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class Country {
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;

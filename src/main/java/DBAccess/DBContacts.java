@@ -9,8 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * DBContacts is used for CRUD operations within the 'contacts' database table.
+ *
+ * @author Robert Brod
+ */
 public class DBContacts {
 
+    /**
+     * Populates and return ObservableList object with all rows in 'contact' database table. Contact Object is created for each
+     * row for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing row data
+     */
     public static ObservableList<Contact> getAllContacts(){
         ObservableList<Contact> allContacts = FXCollections.observableArrayList();
 
@@ -37,6 +48,12 @@ public class DBContacts {
         return allContacts;
     }
 
+    /**
+     * Populates and return Contact Object with row in 'contacts' database table with matching Contact ID.
+     *
+     * @param contactId Contact ID
+     * @return          Object containing row data
+     */
     public static Contact getContact(int contactId){
         Contact contact = null;
 
@@ -63,6 +80,12 @@ public class DBContacts {
         return contact;
     }
 
+    /**
+     * Populates and return Contact Object with row in 'contacts' database table with matching Contact Name.
+     *
+     * @param contactName Contact Name
+     * @return            Object containing row data
+     */
     public static Contact getContact(String contactName){
         Contact contact = null;
 

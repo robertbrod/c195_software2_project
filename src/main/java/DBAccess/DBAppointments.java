@@ -11,8 +11,19 @@ import java.sql.*;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * DBAppointments is used for CRUD operations within the 'appointments' database table.
+ *
+ * @author Robert Brod
+ */
 public class DBAppointments {
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'appointments' database table. Appointment Object is created
+     * for each row for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing row data
+     */
     public static ObservableList<Appointment> getAllAppointments(){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -86,6 +97,13 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'appointments' database table with matching Customer ID. Appointment
+     * Object is created for each row for manipulation and retrieval of data.
+     *
+     * @param custId Customer ID
+     * @return       ObservableList containing row data
+     */
     public static ObservableList<Appointment> getAllCustomerAppointments(int custId){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -162,6 +180,13 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'appointments' database table with matching Contact ID. Appointment
+     * Object is created for each row for manipulation and retrieval of data.
+     *
+     * @param contId Contact ID
+     * @return       ObservableList containing row data
+     */
     public static ObservableList<Appointment> getAllContactAppointments(int contId){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -238,6 +263,12 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'appointments' table where the start column contains a datetime within +7 days
+     * of current local time. Appointment object is created for each row for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing row data.
+     */
     public static ObservableList<Appointment> getWeeklyAppointments(){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -312,6 +343,12 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'appointments' table where the start column contains a datetime within +30 days
+     * of current local time. Appointment object is created for each row for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing row data.
+     */
     public static ObservableList<Appointment> getMonthlyAppointments(){
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
@@ -386,6 +423,11 @@ public class DBAppointments {
         return allAppointments;
     }
 
+    /**
+     * Inserts appointment into database table. Appointment data is populated from Appointment Object.
+     *
+     * @param appointment Appointment to be added to 'appointments' table
+     */
     public static void addAppointment(Appointment appointment){
         try{
             String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Create_Date, Created_By, Customer_ID, User_ID, Contact_ID) " +
@@ -423,6 +465,11 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Removes appointment from database table.
+     *
+     * @param appointment Appointment to be removed from 'appointments' table
+     */
     public static void removeAppointment(Appointment appointment){
         try{
             String sql = "DELETE FROM appointments WHERE Appointment_ID=?";
@@ -438,6 +485,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Title column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param title Appointment Title
+     */
     public static void updateAppointmentTitle(int id, String title){
         try{
             String sql = "UPDATE appointments " +
@@ -462,6 +515,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Description column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param description Appointment Description
+     */
     public static void updateAppointmentDescription(int id, String description){
         try{
             String sql = "UPDATE appointments " +
@@ -486,6 +545,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Location column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param location Appointment Location
+     */
     public static void updateAppointmentLocation(int id, String location){
         try{
             String sql = "UPDATE appointments " +
@@ -510,6 +575,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Type column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param type Appointment Type
+     */
     public static void updateAppointmentType(int id, String type){
         try{
             String sql = "UPDATE appointments " +
@@ -534,6 +605,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Start column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param start Appointment Start
+     */
     public static void updateAppointmentStart(int id, String start){
         try{
             String sql = "UPDATE appointments " +
@@ -558,6 +635,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates End column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param end Appointment End
+     */
     public static void updateAppointmentEnd(int id, String end){
         try{
             String sql = "UPDATE appointments " +
@@ -582,6 +665,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Customer_ID column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param customerId Customer ID
+     */
     public static void updateAppointmentCustomerId(int id, int customerId){
         try{
             String sql = "UPDATE appointments " +
@@ -606,6 +695,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates User_ID column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param userId User ID
+     */
     public static void updateAppointmentUserId(int id, int userId){
         try{
             String sql = "UPDATE appointments " +
@@ -630,6 +725,12 @@ public class DBAppointments {
         }
     }
 
+    /**
+     * Updates Contact_ID column in database row containing Appointment ID.
+     *
+     * @param id Appointment ID
+     * @param contactId Contact ID
+     */
     public static void updateAppointmentContactId(int id, int contactId){
         try{
             String sql = "UPDATE appointments " +

@@ -12,9 +12,16 @@ public class JDBC {
     private static final String jdbcUrl = protocol + vendor + location + databaseName + "?connectionTimeZone = SERVER";
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String userName = "sqlUser";
-    private static String password = "Passw0rd!";
+    private static final String password = "Passw0rd!";
+
+    /**
+     * Connection object used throughout application.
+     */
     public static Connection connection;
 
+    /**
+     * Register driver and create connection object
+     */
     public static void openConnection()
     {
         try {
@@ -28,10 +35,18 @@ public class JDBC {
         }
     }
 
+    /**
+     * Retrieves connection object for use throughout application.
+     *
+     * @return Connection Object
+     */
     public static Connection getConnection(){
         return connection;
     }
 
+    /**
+     * Explicitly closing database connection.
+     */
     public static void closeConnection() {
         try {
             connection.close();

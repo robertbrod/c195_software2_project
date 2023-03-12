@@ -3,6 +3,11 @@ package Model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * FirstLevelDivision class used to store, modify, and retrieve First Level Division data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class FirstLevelDivision {
     private SimpleIntegerProperty id;
     private SimpleStringProperty division;

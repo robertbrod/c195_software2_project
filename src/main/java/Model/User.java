@@ -3,6 +3,11 @@ package Model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * User class used to store, modify, and retrieve User data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class User {
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;

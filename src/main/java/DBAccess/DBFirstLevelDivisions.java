@@ -9,8 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * DBFirstLevelDivisions is used for CRUD operations within the 'first_level_divisions' database table.
+ *
+ * @author Robert Brod
+ */
 public class DBFirstLevelDivisions {
 
+    /**
+     * Populates and returns FirstLevelDivision object with row in 'first_level_divisions' table with matching Division ID.
+     *
+     * @param divisionId Division ID
+     * @return           Object containing row data
+     */
     public static FirstLevelDivision getDivision(int divisionId){
         FirstLevelDivision division = null;
 
@@ -36,6 +47,12 @@ public class DBFirstLevelDivisions {
         return division;
     }
 
+    /**
+     * Populates and returns FirstLevelDivision object with row in 'first_level_divisions' table with matching Division Name.
+     *
+     * @param divisionName Division Name
+     * @return             Object containing row data in 'first_level_divisions' table containing Division Name
+     */
     public static FirstLevelDivision getDivision(String divisionName){
         FirstLevelDivision division = null;
 
@@ -62,6 +79,13 @@ public class DBFirstLevelDivisions {
         return division;
     }
 
+    /**
+     * Populates and returns ObservableList Object with all rows in 'first_level_divisions' database table containing Country ID. FirstLevelDivision
+     * object is created for each row for manipulation and retrieval of data. This method is used to populate drop down menus according to country.
+     *
+     * @param countryId Country ID
+     * @return          ObservableList containing all row data in database table matching Country ID
+     */
     public static ObservableList<FirstLevelDivision> getAllCountryDivisions(int countryId){
         ObservableList<FirstLevelDivision> firstLevelDivisions = FXCollections.observableArrayList();
 

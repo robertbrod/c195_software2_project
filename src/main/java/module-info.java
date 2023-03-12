@@ -5,6 +5,7 @@ module rbrod.scheduleapp {
     requires mysql.connector.j;
 
     opens Controller to javafx.fxml;
+    exports Model;
 
     exports rbrod.scheduleapp;
     opens rbrod.scheduleapp;

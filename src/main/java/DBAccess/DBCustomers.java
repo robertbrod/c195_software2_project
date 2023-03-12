@@ -13,8 +13,19 @@ import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * DBCustomers is used for CRUD operations within the 'customers' database table.
+ *
+ * @author Robert Brod
+ */
 public class DBCustomers {
 
+    /**
+     * Populates and return ObservableList Object with all rows in 'customers' database table. Customer object is created for each row
+     * for manipulation and retrieval of data.
+     *
+     * @return ObservableList containing all row data in database table
+     */
     public static ObservableList<Customer> getAllCustomers(){
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
 
@@ -68,6 +79,12 @@ public class DBCustomers {
         return allCustomers;
     }
 
+    /**
+     * Populates and returns Customer Object with row in 'customers' table with matching Customer Name.
+     *
+     * @param customerName Customer Name
+     * @return             Object containing row data in 'customers' table containing Customer Name
+     */
     public static Customer getCustomer(String customerName){
         Customer customer = null;
 
@@ -97,7 +114,7 @@ public class DBCustomers {
                 LocalTime localLastUpdateTime = rs.getTime("Last_Update").toLocalTime();
                 ZonedDateTime zonedLastUpdate = ZonedDateTime.of(localLastUpdateDate, localLastUpdateTime, ZoneId.of("UTC"));
 
-                String lastUpdatedBy = rs.getString("Last_Updatd_By");
+                String lastUpdatedBy = rs.getString("Last_Updated_By");
 
                 customer = new Customer(id, name, address, postal, phone, zonedCreateDate, createdBy, zonedLastUpdate, lastUpdatedBy, divisionId);
             }
@@ -109,6 +126,12 @@ public class DBCustomers {
         return customer;
     }
 
+    /**
+     * Populates and returns Customer Object with row in 'customers' table with matching Customer ID.
+     *
+     * @param customerID Customer ID
+     * @return           Object containing row data in 'customers' table containing Customer ID
+     */
     public static Customer getCustomer(int customerID){
         Customer customer = null;
 
@@ -150,6 +173,11 @@ public class DBCustomers {
         return customer;
     }
 
+    /**
+     * Inserts customer into database table. Column data is populated from Customer object.
+     *
+     * @param customer Customer to be added to 'customers' table
+     */
     public static void addCustomer(Customer customer){
         try{
             String sql = "INSERT INTO customers (Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Division_ID) " +
@@ -176,6 +204,11 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Removes customer from database table.
+     *
+     * @param customer Customer to be removed from 'customers' table
+     */
     public static void removeCustomer(Customer customer){
         try{
             String sql = "DELETE FROM customers WHERE Customer_ID=?";
@@ -191,6 +224,12 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Updates Customer_Name column in database row containing Customer ID.
+     *
+     * @param id Customer ID
+     * @param name Customer Name
+     */
     public static void updateCustomerName(int id, String name){
         try{
             String sql = "UPDATE customers " +
@@ -215,6 +254,12 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Updates Address column in database row containing Customer ID.
+     *
+     * @param id Customer ID
+     * @param address Customer Address
+     */
     public static void updateCustomerAddress(int id, String address){
         try{
             String sql = "UPDATE customers " +
@@ -239,6 +284,12 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Updates Postal_Code column in database row containing Customer ID.
+     *
+     * @param id Customer ID
+     * @param postal Customer Postal Code
+     */
     public static void updateCustomerPostal(int id, String postal){
         try{
             String sql = "UPDATE customers " +
@@ -263,6 +314,12 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Updates Phone column in database row containing Customer ID.
+     *
+     * @param id Customer ID
+     * @param phone Customer Phone Number
+     */
     public static void updateCustomerPhone(int id, String phone){
         try{
             String sql = "UPDATE customers " +
@@ -287,6 +344,12 @@ public class DBCustomers {
         }
     }
 
+    /**
+     * Updates Division_ID column in database row containing Customer ID.
+     *
+     * @param id Customer ID
+     * @param divisionId Customer Division ID
+     */
     public static void updateCustomerDivisionId(int id, int divisionId){
         try{
             String sql = "UPDATE customers " +

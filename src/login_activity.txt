@@ -1,0 +1,6 @@
+Failed Login - Reason: Incorrect username - Time: UTC 2023/03/09 02/48 AM
+Failed Login - Reason: Incorrect password - Time: UTC 2023/03/09 02/49 AM
+Successful Login - User: test - Time: UTC 2023/03/09 02/50 AM
+Successful Login - User: test - Time: UTC 2023/03/09 03/03 AM
+Successful Login - User: test - Time: UTC 2023/03/09 03/22 AM
+Successful Login - User: test - Time: UTC 2023/03/12 02/26 AM

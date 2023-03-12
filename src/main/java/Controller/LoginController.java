@@ -17,8 +17,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import rbrod.scheduleapp.ScheduleApplication;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
@@ -32,6 +35,8 @@ public class LoginController implements Initializable {
     private Label zoneLabel;
 
     public void loginBtnAction(ActionEvent actionEvent) throws IOException{
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("z yyyy/MM/dd hh/mm a");
+
         Alert incorrectPassword = new Alert(AlertType.ERROR, "Incorrect password entered!");
         Alert noUserFound = new Alert(AlertType.ERROR, "No user found!");
 
@@ -53,16 +58,34 @@ public class LoginController implements Initializable {
                 noUserFoundFrench.showAndWait();
             }
 
+            try(FileWriter writer = new FileWriter("src/login_activity.txt", true)){
+                writer.write("Failed Login - Reason: Incorrect username - Time: " + TimeHelper.getLocalToUTCConversion().format(formatter) + "\n");
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
             return;
         }
 
         if(password.equals(DBUsers.getPassword(username))){
+            try(FileWriter writer = new FileWriter("src/login_activity.txt", true)){
+                writer.write("Successful Login - User: " + username + " - Time: " + TimeHelper.getLocalToUTCConversion().format(formatter) + "\n");
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
             goToCustomerForm(actionEvent);
         }else{
             if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
                 incorrectPassword.showAndWait();
             }else{
                 incorrectPasswordFrench.showAndWait();
+            }
+
+            try(FileWriter writer = new FileWriter("src/login_activity.txt", true)){
+                writer.write("Failed Login - Reason: Incorrect password - Time: " + TimeHelper.getLocalToUTCConversion().format(formatter) + "\n");
+            }catch(IOException e){
+                e.printStackTrace();
             }
         }
 

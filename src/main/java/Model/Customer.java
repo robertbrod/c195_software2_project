@@ -7,6 +7,11 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Customer class used to store, modify, and retrieve Customer data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class Customer {
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;
@@ -40,6 +45,9 @@ public class Customer {
         setFormattedAddress();
     }
 
+    /**
+     * Method used to populate formatted address to appear in TableView on Customer Form. This formatted address includes address and first level division.
+     */
     public void setFormattedAddress(){
         String formattedAddressStr = "" + this.address.getValue() + ", " + this.firstLevelDivision.getDivision().getValue();
         this.formattedAddress = new SimpleStringProperty(formattedAddressStr);

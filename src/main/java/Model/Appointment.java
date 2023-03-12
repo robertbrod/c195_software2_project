@@ -6,6 +6,11 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.time.ZonedDateTime;
 
+/**
+ * Appointment class used to store, modify, and retrieve Appointment data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class Appointment {
     private SimpleIntegerProperty id;
     private SimpleStringProperty title;

@@ -3,6 +3,11 @@ package Model;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * Contact class used to store, modify, and retrieve Contact data fetched from database.
+ *
+ * @author Robert Brod
+ */
 public class Contact {
     private SimpleIntegerProperty id;
     private SimpleStringProperty name;
