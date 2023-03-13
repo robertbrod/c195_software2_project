@@ -24,6 +24,11 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * ReportsController is the controller class for the <code>reports.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class ReportsController implements Initializable {
     @FXML
     private Label headerLabel;
@@ -142,10 +147,22 @@ public class ReportsController implements Initializable {
     @FXML
     private Button appointmentsBtn;
 
+    /**
+     * Calls method to send user to <code>appointments.fxml</code> scene. Methods separated for consistency and clarity.
+     *
+     * @param actionEvent appointments button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void appointmentsBtnAction(ActionEvent actionEvent) throws IOException {
         goToAppointmentsForm(actionEvent);
     }
 
+    /**
+     * Sends user to <code>appointments.fxml</code> scene.
+     *
+     * @param actionEvent appointments button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToAppointmentsForm(ActionEvent actionEvent) throws IOException {
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("appointments.fxml"));
         Scene scene = new Scene(parent);
@@ -156,6 +173,9 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Populates all report total fields
+     */
     public void populateTotals(){
         int count = 0;
 
@@ -252,6 +272,9 @@ public class ReportsController implements Initializable {
         decemberTotal.setText(Integer.toString(decCount));
     }
 
+    /**
+     * Sets scene labels to English
+     */
     public void setEnglishLabels(){
         headerLabel.setText("Reports");
         typeTotalLabel.setText("Total By Type");
@@ -272,6 +295,9 @@ public class ReportsController implements Initializable {
         appointmentsBtn.setText("Appointments");
     }
 
+    /**
+     * Sets scene labels to French
+     */
     public void setFrenchLabels(){
         headerLabel.setText("Rapports");
         typeTotalLabel.setText("Total par type");
@@ -292,6 +318,16 @@ public class ReportsController implements Initializable {
         appointmentsBtn.setText("Rendez-vous");
     }
 
+    /**
+     * Sets appropriate scene language, populates <code>anikaScheduleTable</code>, <code>danielScheduleTable</code>, and <code>liScheduleTable</code>
+     * TableViews. Calls method to populate totals
+     *
+     * Lambda expression used to set cell value factories in our TableViews which provides a more concise and readable code compared
+     * to creating a separate class for the callback function.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){

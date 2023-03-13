@@ -21,8 +21,16 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * AppointmentsController is the controller class for the <code>appointments.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class AppointmentsController implements Initializable {
 
+    /**
+     * Appointment object used to maintain which Appointment object was clicked on last in <code>appointmentsTable</code> TableView
+     */
     private Appointment highlightedAppointment = null;
     @FXML
     private Label headerLabel;
@@ -63,16 +71,36 @@ public class AppointmentsController implements Initializable {
     @FXML
     private Button reportsBtn;
 
+    /**
+     * Calls method that sends user to <code>reports.fxml</code> scene. Methods separated for consistency and clarity.
+     *
+     * @param actionEvent reports button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void reportsBtnAction(ActionEvent actionEvent) throws IOException{
         goToReportsForm(actionEvent);
     }
 
+    /**
+     * Calls method that sends user to <code>appointment_modification.fxml</code> scene and ensures that no data is passed as this
+     * would be a new appointment
+     *
+     * @param actionEvent add button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void addBtnAction(ActionEvent actionEvent) throws IOException{
         highlightedAppointment = null;
 
         goToAppointmentModificationForm(actionEvent);
     }
 
+    /**
+     * Validates that an appointment has been selected/highlighted and then calls the method to send user to <code>appointment_modification.fxml</code>
+     * scene.
+     *
+     * @param actionEvent modify button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void modifyBtnAction(ActionEvent actionEvent) throws IOException{
         Alert noAppointmentSelected = new Alert(Alert.AlertType.ERROR, "No appointment selected!");
 
@@ -92,6 +120,12 @@ public class AppointmentsController implements Initializable {
         }
     }
 
+    /**
+     * Validates that an appointment has been selected/highlighted and removes that appointment from database. TableView is then refreshed
+     * to show these changes.
+     *
+     * @param actionEvent delete button fire, used to reference primary stage
+     */
     public void deleteBtnAction(ActionEvent actionEvent){
         Alert noAppointmentSelected = new Alert(Alert.AlertType.ERROR, "No appointment selected!");
 
@@ -129,20 +163,44 @@ public class AppointmentsController implements Initializable {
         appointmentsTable.setItems(DBAppointments.getAllAppointments());
     }
 
+    /**
+     * Calls method that sends user to <code>customer_data.fxml</code> scene. Methods separated for consistency and clarity.
+     *
+     * @param actionEvent customers button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void customersBtnAction(ActionEvent actionEvent)throws IOException{
         goToCustomersForm(actionEvent);
     }
 
+    /**
+     * Changes appointments ot be shown to only those that occur within +30 days of current local time. Ensures that <code>weeklyRadio</code>
+     * is unselected so both radio buttons are not selected at once.
+     *
+     * @param actionEvent monthly radio selection
+     */
     public void monthlyRadioAction(ActionEvent actionEvent){
         appointmentsTable.setItems(DBAppointments.getMonthlyAppointments());
         weeklyRadio.setSelected(false);
     }
 
+    /**
+     * Changes appointments ot be shown to only those that occur within +7 days of current local time. Ensures that <code>monthlyRadio</code>
+     * is unselected so both radio buttons are not selected at once.
+     *
+     * @param actionEvent weekly radio selection
+     */
     public void weeklyRadioAction(ActionEvent actionEvent){
         appointmentsTable.setItems(DBAppointments.getWeeklyAppointments());
         monthlyRadio.setSelected(false);
     }
 
+    /**
+     * Sends user to <code>appointment_modification.fxml</code> scene.
+     *
+     * @param actionEvent add/modify button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToAppointmentModificationForm(ActionEvent actionEvent) throws IOException {
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("appointment_modification.fxml"));
         Scene scene = new Scene(parent);
@@ -153,6 +211,12 @@ public class AppointmentsController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sends user to <code>reports.fxml</code> scene.
+     *
+     * @param actionEvent reports button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToReportsForm(ActionEvent actionEvent) throws IOException{
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("reports.fxml"));
         Scene scene = new Scene(parent);
@@ -163,6 +227,12 @@ public class AppointmentsController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sends user to <code>customer_data.fxml</code> scene.
+     *
+     * @param actionEvent customers button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToCustomersForm(ActionEvent actionEvent) throws IOException{
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("customer_data.fxml"));
         Scene scene = new Scene(parent);
@@ -173,6 +243,9 @@ public class AppointmentsController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sets all scene labels to English.
+     */
     public void setEnglishLabels(){
         headerLabel.setText("Appointments");
 
@@ -196,6 +269,9 @@ public class AppointmentsController implements Initializable {
         customersBtn.setText("Customers");
     }
 
+    /**
+     * Sets all scene labels to French.
+     */
     public void setFrenchLabels(){
         headerLabel.setText("Rendez-vous");
 
@@ -219,6 +295,17 @@ public class AppointmentsController implements Initializable {
         customersBtn.setText("Clients");
     }
 
+    /**
+     * Sets appropriate label language, populates <code>appointmentsTable</code> TableView. Handles user input via mouse click to
+     * select rows in TableView and populates <code>highlightedAppointment</code>.
+     *
+     * Lambda expressions are used in two ways here. One is for setting cell value factories in our TableView which provides a more concise and readable
+     * code compared to creating a separate class for the callback function. THe other way is to handle mouse events for our TableView by defining a callback function
+     * for the event handler without the need to create a separate class.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){

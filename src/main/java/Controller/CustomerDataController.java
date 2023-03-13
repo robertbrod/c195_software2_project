@@ -20,7 +20,6 @@ import rbrod.scheduleapp.ScheduleApplication;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -28,8 +27,17 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ResourceBundle;
 
+
+/**
+ * CustomerDataController is the controller class for the <code>customer_data.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class CustomerDataController implements Initializable {
 
+    /**
+     * Customer object used to maintain which Customer object was clicked on last in <code>customerDataTable</code> TableView
+     */
     private Customer highlightedCustomer = null;
 
     @FXML
@@ -55,6 +63,13 @@ public class CustomerDataController implements Initializable {
     @FXML
     private Label headerLabel;
 
+    /**
+     * Validates that a customer has been selected/highlighted and then calls method to send user to <code>customer-modification.fxml</code>
+     * scene.
+     *
+     * @param actionEvent modify button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void modifyBtnAction(ActionEvent actionEvent) throws IOException {
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
 
@@ -74,12 +89,25 @@ public class CustomerDataController implements Initializable {
         }
     }
 
+    /**
+     * Calls method that sends user to <code>customer-modification.fxml</code> scene and ensures that no data is passed as this
+     * would be a new customer.
+     *
+     * @param actionEvent add button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void addBtnAction(ActionEvent actionEvent) throws IOException{
         highlightedCustomer = null;
 
         goToCustomerModificationForm(actionEvent);
     }
 
+    /**
+     * Ensures that a customer has been selected/highlighted and removes that customer from database. TableView is then refreshed
+     * to show these changes.
+     *
+     * @param actionEvent delete button fire, used to reference primary stage
+     */
     public void deleteBtnAction(ActionEvent actionEvent){
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
         Alert customerHasAppointments = new Alert(AlertType.ERROR, "Customer appointments must be cancelled before removing customer!");
@@ -131,10 +159,22 @@ public class CustomerDataController implements Initializable {
         customerDataTable.setItems(DBCustomers.getAllCustomers());
     }
 
+    /**
+     * Calls method that sends user to <code>appointments.fxml</code> scene. Methods separated for consistency.
+     *
+     * @param actionEvent appointments button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void appointmentsBtnAction(ActionEvent actionEvent) throws IOException{
         goToAppointmentsForm(actionEvent);
     }
 
+    /**
+     * Sends user to <code>appointments.fxml</code> scene.
+     *
+     * @param actionEvent appointments button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToAppointmentsForm(ActionEvent actionEvent) throws IOException{
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("appointments.fxml"));
         Scene scene = new Scene(parent);
@@ -145,6 +185,12 @@ public class CustomerDataController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sends user to <code>customer_modification.fxml</code> scene.
+     *
+     * @param actionEvent add/modify button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToCustomerModificationForm(ActionEvent actionEvent) throws IOException {
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("customer_modification.fxml"));
         Scene scene = new Scene(parent);
@@ -155,6 +201,9 @@ public class CustomerDataController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sets all scene labels to English.
+     */
     public void setEnglishLabels(){
         headerLabel.setText("Customer Data");
 
@@ -168,6 +217,9 @@ public class CustomerDataController implements Initializable {
         appointmentsBtn.setText("Appointments");
     }
 
+    /**
+     * Sets all scene labels to French.
+     */
     public void setFrenchLabels(){
         headerLabel.setText("Données Client");
 
@@ -181,6 +233,9 @@ public class CustomerDataController implements Initializable {
         appointmentsBtn.setText("Rendez-vous");
     }
 
+    /**
+     * Checks to see if logged in used has any appointments within +15 minutes of current local time. An alert is sent either way.
+     */
     public void checkForAppointments(){
         Alert noAppointments = new Alert(AlertType.INFORMATION);
         noAppointments.setTitle("Appointments!");
@@ -217,11 +272,10 @@ public class CustomerDataController implements Initializable {
                     System.out.println(localTime.until(apptStartTime, ChronoUnit.MINUTES));
                     if (ScheduleApplication.language == ScheduleApplication.Language.ENGLISH) {
                         upcomingAppointment.showAndWait();
-                        return;
                     }else{
                         upcomingAppointmentFrench.showAndWait();
-                        return;
                     }
+                    return;
                 }
             }
         }
@@ -233,6 +287,17 @@ public class CustomerDataController implements Initializable {
         }
     }
 
+    /**
+     * Sets appropriate label language, populates <code>customerDataTable</code> TableView, calls method to check for upcoming appointments.
+     * Handles user input via mouse click to select rows in <code>customerDataTable</code> tableView and populates <code>highlightedCustomer</code>.
+     *
+     * Lambda expressions are used in two ways here. One is for setting cell value factories in our TableView which provides a more concise and readable
+     * code compared to creating a separate class for the callback function. THe other way is to handle mouse events for our TableView by defining a callback function
+     * for the event handler without the need to create a separate class.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){

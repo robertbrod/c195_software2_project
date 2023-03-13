@@ -23,12 +23,19 @@ import rbrod.scheduleapp.ScheduleApplication;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Time;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * AppointmentModificationController is the controller class for the <code>appointment_modification.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class AppointmentModificationController implements Initializable {
+    /**
+     * Static Appointment object variable used for passing appointment data between <code>AppointmentsController</code> and <code>AppointmentModificationController</code>.
+     */
     public static Appointment passedAppointment = null;
     @FXML
     private Label headerLabel;
@@ -77,6 +84,13 @@ public class AppointmentModificationController implements Initializable {
     @FXML
     private Button cancelBtn;
 
+    /**
+     * Calls method to validate form data and calls either the method to create a new appointment, or to modify the passed appointment if there is one.
+     * Sends user to <code>appointments.fxml</code> scene.
+     *
+     * @param actionEvent save button fire
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void saveBtnAction(ActionEvent actionEvent) throws IOException{
         if(validateData()){
             if(passedAppointment != null){
@@ -89,10 +103,19 @@ public class AppointmentModificationController implements Initializable {
         }
     }
 
+    /**
+     * Calls method to send user to <code>appointments.fxml</code> scene. Methods separated for consistency and clarity.
+     *
+     * @param actionEvent cancel button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void cancelBtnAction(ActionEvent actionEvent) throws IOException{
         goToAppointmentsForm(actionEvent);
     }
 
+    /**
+     * Populates form fields if an appointment was 'passed' in with that appointment's data.
+     */
     public void populateFields(){
         idField.setText(Integer.toString(passedAppointment.getId().getValue()));
         titleField.setText(passedAppointment.getTitle().getValue());
@@ -117,6 +140,9 @@ public class AppointmentModificationController implements Initializable {
         userIdCombo.setValue(Integer.toString(passedAppointment.getUserId().getValue()));
     }
 
+    /**
+     * Updates passed appointments data in database.
+     */
     public void modifyPassedAppointment(){
         int id = passedAppointment.getId().getValue();
         String title = titleField.getText();
@@ -157,6 +183,9 @@ public class AppointmentModificationController implements Initializable {
         DBAppointments.updateAppointmentUserId(id, userId);
     }
 
+    /**
+     * Creates new appointment object with form's field data and adds appointment to database.
+     */
     public void createNewAppointment(){
         String title = titleField.getText();
         String description = descriptionField.getText();
@@ -189,6 +218,11 @@ public class AppointmentModificationController implements Initializable {
         DBAppointments.addAppointment(appointment);
     }
 
+    /**
+     * Validates all form data. Validates that no form field was left blank and that 'start' and 'end' fields were formatted appropriately.
+     *
+     * @return Returns true if data was successfully validated
+     */
     public boolean validateData(){
         Alert invalidTitleField = new Alert(AlertType.ERROR, "Invalid title field!");
         Alert invalidDescriptionField = new Alert(AlertType.ERROR, "Invalid description field!");
@@ -446,6 +480,12 @@ public class AppointmentModificationController implements Initializable {
         return true;
     }
 
+    /**
+     * Sends user to <code>appointments.fxml</code> scene.
+     *
+     * @param actionEvent save/cancel button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToAppointmentsForm(ActionEvent actionEvent) throws IOException{
         passedAppointment = null;
 
@@ -458,6 +498,9 @@ public class AppointmentModificationController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sets scene labels to English
+     */
     public void setEnglishLabels(){
         headerLabel.setText("Appointment Information");
 
@@ -476,6 +519,9 @@ public class AppointmentModificationController implements Initializable {
         cancelBtn.setText("Cancel");
     }
 
+    /**
+     * Sets scene labels to French
+     */
     public void setFrenchLabels(){
         headerLabel.setText("Informations sur le rendez-vous");
 
@@ -494,6 +540,13 @@ public class AppointmentModificationController implements Initializable {
         cancelBtn.setText("Annuler");
     }
 
+    /**
+     * Calls method to set label languages appropriately, populates <code>contactCombo</code>, <code>customerIdCombo</code>, and <code>userIdCombo</code>
+     * with appropriate values. Populate fields if an appointment was 'passed' in.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){

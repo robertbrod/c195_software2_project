@@ -22,8 +22,16 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * CustomerModificationController is the controller class for the <code>customer_modification.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class CustomerModificationController implements Initializable {
 
+    /**
+     * Static Customer object used to 'pass' Customer data between <code>CustomerDataController</code> and <code>CustomerModificationController</code>.
+     */
     public static Customer passedCustomer = null;
     @FXML
     private TextField idField;
@@ -58,7 +66,9 @@ public class CustomerModificationController implements Initializable {
     @FXML
     private Button cancelBtn;
 
-
+    /**
+     * Populates form fields if a customer was 'passed' in with that customer's data.
+     */
     public void populateFields(){
         idField.setText(Integer.toString(passedCustomer.getId().getValue()));
         nameField.setText(passedCustomer.getName().getValue());
@@ -74,6 +84,11 @@ public class CustomerModificationController implements Initializable {
         divisionCombo.setValue(passedCustomer.getFirstLevelDivision().getDivision().getValue());
     }
 
+    /**
+     * Populates First Level Division combo appropriately based on Country selection.
+     *
+     * @param countryId ID of selected country
+     */
     public void populateDivisionCombo(int countryId){
         divisionCombo.getItems().clear();
         for(FirstLevelDivision firstLevelDivision : DBFirstLevelDivisions.getAllCountryDivisions(countryId)){
@@ -81,6 +96,9 @@ public class CustomerModificationController implements Initializable {
         }
     }
 
+    /**
+     * Updates passed customer data in database.
+     */
     public void modifyPassedCustomer(){
         int id = passedCustomer.getId().getValue();
         String name = nameField.getText();
@@ -98,6 +116,9 @@ public class CustomerModificationController implements Initializable {
         DBCustomers.updateCustomerDivisionId(id, divisionId);
     }
 
+    /**
+     * Creates a new customer object with form's field data and adds customer to database.
+     */
     public void createNewCustomer(){
         String name = nameField.getText();
         String address = addressField.getText();
@@ -111,6 +132,11 @@ public class CustomerModificationController implements Initializable {
         DBCustomers.addCustomer(customer);
     }
 
+    /**
+     * Validates all form data. Validates that no form field was left blank.
+     *
+     * @return Returns true if data was successfully validated
+     */
     public Boolean validateData(){
         Alert invalidNameField = new Alert(AlertType.ERROR, "Invalid name field!");
         Alert invalidAddressField = new Alert(AlertType.ERROR, "Invalid address field!");
@@ -207,6 +233,13 @@ public class CustomerModificationController implements Initializable {
         return true;
     }
 
+    /**
+     * Calls method to validate form data and either the method to create a new customer, or to modify the passed customer if there is one.
+     * Sends user to <code>customer_data.fxml</code> scene.
+     *
+     * @param actionEvent save button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void saveBtnAction(ActionEvent actionEvent) throws IOException{
         if(validateData()){
             if(passedCustomer != null){
@@ -219,10 +252,22 @@ public class CustomerModificationController implements Initializable {
         }
     }
 
+    /**
+     * Calls method to send user to <code>customer_data.fxml</code> scene. Methods separated for consistency and clarity.
+     *
+     * @param actionEvent cancel button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void cancelBtnAction(ActionEvent actionEvent) throws IOException{
         goToCustomerDataForm(actionEvent);
     }
 
+    /**
+     * Calls method to populate First Level Division combo appropriately based on country selection. Changes label for First Level Division
+     * field to appropriate table such as state or region.
+     *
+     * @param actionEvent country combo selection
+     */
     public void countryComboAction(ActionEvent actionEvent){
         String countryStr = countryCombo.getValue();
         Country country = DBCountries.getCountry(countryStr);
@@ -244,6 +289,12 @@ public class CustomerModificationController implements Initializable {
         }
     }
 
+    /**
+     * Sends user to <code>customer_date.fxml</code> scene.
+     *
+     * @param actionEvent save/cancel button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToCustomerDataForm(ActionEvent actionEvent) throws IOException {
         passedCustomer = null;
 
@@ -256,6 +307,9 @@ public class CustomerModificationController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Set scene labels to English
+     */
     public void setEnglishLabels(){
         headerLabel.setText("Customer Information");
 
@@ -270,6 +324,9 @@ public class CustomerModificationController implements Initializable {
         cancelBtn.setText("Cancel");
     }
 
+    /**
+     * Set scene labels to French
+     */
     public void setFrenchLabels(){
         headerLabel.setText("Informations Client");
 
@@ -284,6 +341,13 @@ public class CustomerModificationController implements Initializable {
         cancelBtn.setText("Annuler");
     }
 
+    /**
+     * Sets appropriate scene labels, populates country combo, populated field with <code>passedCustomer</code> data if there
+     * is one.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){

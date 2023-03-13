@@ -17,13 +17,17 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import rbrod.scheduleapp.ScheduleApplication;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
+/**
+ * LoginController is the controller class for the <code>login.fxml</code> scene.
+ *
+ * @author Robert Brod
+ */
 public class LoginController implements Initializable {
     @FXML
     private TextField usernameField;
@@ -34,6 +38,13 @@ public class LoginController implements Initializable {
     @FXML
     private Label zoneLabel;
 
+    /**
+     * Validates username and password fields, logs login attempts in <code>login_activity.txt</code>, and calls method that
+     * sends user to <code>customer_data.fxml</code> scene.
+     *
+     * @param actionEvent login button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void loginBtnAction(ActionEvent actionEvent) throws IOException{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("z yyyy/MM/dd hh/mm a");
 
@@ -92,6 +103,12 @@ public class LoginController implements Initializable {
         ScheduleApplication.user = DBUsers.getUser(username);
     }
 
+    /**
+     * Sends user to <code>customer_data.fxml</code> scene.
+     *
+     * @param actionEvent login button fire, used to reference primary stage
+     * @throws IOException necessary due to <code>.fxml</code> file being loaded from file
+     */
     public void goToCustomerForm(ActionEvent actionEvent) throws IOException{
         Parent parent = FXMLLoader.load(ScheduleApplication.class.getResource("customer_data.fxml"));
         Scene scene = new Scene(parent);
@@ -102,6 +119,9 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Sets labels in scene to English
+     */
     public void setEnglishLabels(){
         usernameField.setPromptText("Username");
         passwordField.setPromptText("Password");
@@ -109,6 +129,9 @@ public class LoginController implements Initializable {
         loginBtn.setText("Login");
     }
 
+    /**
+     * Sets labels in scene to French
+     */
     public void setFrenchLabels(){
         usernameField.setPromptText("Nom d'utilisateur");
         passwordField.setPromptText("Mot de passe");
@@ -116,6 +139,12 @@ public class LoginController implements Initializable {
         loginBtn.setText("Connexion");
     }
 
+    /**
+     * Sets label for Zone ID and sets appropriate label language.
+     *
+     * @param url location used to resolve relative paths for the root object
+     * @param resourceBundle the resources used to localize the root object
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         zoneLabel.setText("Zone ID: " + TimeHelper.getLocalZoneId());
