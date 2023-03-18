@@ -6,6 +6,10 @@ module rbrod.scheduleapp {
 
     opens Controller to javafx.fxml;
     exports Model;
+    exports Controller;
+    exports Database;
+    exports Helper;
+    exports DBAccess;
 
     exports rbrod.scheduleapp;
     opens rbrod.scheduleapp;

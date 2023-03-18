@@ -103,52 +103,44 @@ public class CustomerDataController implements Initializable {
     }
 
     /**
-     * Ensures that a customer has been selected/highlighted and removes that customer from database. TableView is then refreshed
-     * to show these changes.
+     * Ensures that a customer has been selected/highlighted and removes that customer, as well as that customer's appointments, from database.
+     * TableView is then refreshed to show these changes.
      *
      * @param actionEvent delete button fire, used to reference primary stage
      */
     public void deleteBtnAction(ActionEvent actionEvent){
         Alert noCustomerSelected = new Alert(AlertType.ERROR, "No customer selected!");
-        Alert customerHasAppointments = new Alert(AlertType.ERROR, "Customer appointments must be cancelled before removing customer!");
 
         Alert noCustomerSelectedFrench = new Alert(AlertType.ERROR, "Aucun client sélectionné !");
         noCustomerSelectedFrench.setHeaderText("Erreur!");
         noCustomerSelectedFrench.setTitle("Erreur!");
 
-        Alert customerHasAppointmentsFrench = new Alert(AlertType.ERROR, "Les rendez-vous clients doivent être annulés avant de supprimer le client !");
-        customerHasAppointmentsFrench.setHeaderText("Erreur!");
-        customerHasAppointmentsFrench.setTitle("Erreur!");
-
         if(highlightedCustomer != null){
+            //Remover customer appointments
             ObservableList<Appointment> customerAppointments = DBAppointments.getAllCustomerAppointments(highlightedCustomer.getId().getValue());
-            if(customerAppointments.size() != 0){
-                if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
-                    customerHasAppointments.showAndWait();
-                }else{
-                    customerHasAppointmentsFrench.showAndWait();
-                }
-            }else{
-                DBCustomers.removeCustomer(highlightedCustomer);
-                int id = highlightedCustomer.getId().getValue();
-                String name = highlightedCustomer.getName().getValue();
-                highlightedCustomer = null;
-
-                Alert customerDeleted = new Alert(AlertType.INFORMATION, "ID: " + id + "\nName: " + name);
-                customerDeleted.setHeaderText("Customer Removed!");
-                customerDeleted.setTitle("Removed!");
-
-                Alert customerDeletedFrench = new Alert(AlertType.INFORMATION, "ID: " + id + "\nNom: " + name);
-                customerDeletedFrench.setHeaderText("Client supprimé !");
-                customerDeletedFrench.setTitle("Supprimé!");
-
-                if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
-                    customerDeleted.showAndWait();
-                }else{
-                    customerDeletedFrench.showAndWait();
-                }
+            for(Appointment customerAppointment : customerAppointments){
+                DBAppointments.removeAppointment(customerAppointment);
             }
-        }else{
+
+            DBCustomers.removeCustomer(highlightedCustomer);
+            int id = highlightedCustomer.getId().getValue();
+            String name = highlightedCustomer.getName().getValue();
+            highlightedCustomer = null;
+
+            Alert customerDeleted = new Alert(AlertType.INFORMATION, "ID: " + id + "\nName: " + name);
+            customerDeleted.setHeaderText("Customer Removed!");
+            customerDeleted.setTitle("Removed!");
+
+            Alert customerDeletedFrench = new Alert(AlertType.INFORMATION, "ID: " + id + "\nNom: " + name);
+            customerDeletedFrench.setHeaderText("Client supprimé !");
+            customerDeletedFrench.setTitle("Supprimé!");
+
+            if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                customerDeleted.showAndWait();
+            }else{
+                customerDeletedFrench.showAndWait();
+            }
+        } else{
             if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
                 noCustomerSelected.showAndWait();
             }else{

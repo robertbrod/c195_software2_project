@@ -376,6 +376,15 @@ public class AppointmentModificationController implements Initializable {
                             return false;
                         }
                     }
+                    if(estStartTime.equals(apptStartTimeEst)){
+                        if(ScheduleApplication.language == ScheduleApplication.Language.ENGLISH){
+                            appointmentOverlap.showAndWait();
+                            return false;
+                        }else{
+                            appointmentOverlapFrench.showAndWait();
+                            return false;
+                        }
+                    }
                 }
             }
         }catch(Exception e){

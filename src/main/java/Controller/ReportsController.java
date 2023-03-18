@@ -3,7 +3,10 @@ package Controller;
 import DBAccess.DBAppointments;
 import Helper.TimeHelper;
 import Model.Appointment;
+import Model.ReportTotal;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,9 +38,11 @@ public class ReportsController implements Initializable {
     @FXML
     private Label typeTotalLabel;
     @FXML
-    private Label planningSessionTotal;
+    private TableView<ReportTotal> totalByTypeTableView;
     @FXML
-    private Label debriefingTotal;
+    private TableColumn<ReportTotal, String> typeCol;
+    @FXML
+    private TableColumn<ReportTotal, Number> totalCol;
     @FXML
     private Label monthTotalLabel;
     @FXML
@@ -174,28 +179,54 @@ public class ReportsController implements Initializable {
     }
 
     /**
+     * Calculates total appointment counts by type property. Refreshes TableView to reflect these updates.
+     */
+    public void populateTypeTotals(){
+        ObservableList<ReportTotal> totalsByType = FXCollections.observableArrayList();
+
+        ObservableList<Appointment> appointments = DBAppointments.getAllAppointments();
+        ObservableList<String> uniqueTypes = FXCollections.observableArrayList();
+
+        //Get unique types
+        uniqueTypes.add(appointments.get(0).getType().getValue());
+        for(int i = 1; i < appointments.size(); i++){
+            boolean matchFound = false;
+            for(String type : uniqueTypes){
+                if(appointments.get(i).getType().getValue().equals(type)){
+                    matchFound = true;
+                }
+            }
+            if(!matchFound){
+                uniqueTypes.add(appointments.get(i).getType().getValue());
+            }
+        }
+
+        //Create ReportTotal object for each unique type
+        for(String type : uniqueTypes){
+            ReportTotal reportTotal = new ReportTotal(type);
+            totalsByType.add(reportTotal);
+        }
+
+        //Calculate totals
+        for(Appointment appointment : appointments){
+            for(ReportTotal reportTotal : totalsByType){
+                if(appointment.getType().getValue().equals(reportTotal.getType().getValue())){
+                    reportTotal.incrementTotal();
+                    break;
+                }
+            }
+        }
+
+        totalByTypeTableView.setItems(totalsByType);
+    }
+
+    /**
      * Populates all report total fields
      */
     public void populateTotals(){
+        populateTypeTotals();
+
         int count = 0;
-
-        //Count total planning appointments
-        for(Appointment appointment : DBAppointments.getAllAppointments()){
-            if(appointment.getType().getValue().equals("Planning Session")){
-                count++;
-            }
-        }
-        planningSessionTotal.setText(Integer.toString(count));
-        count = 0;
-
-        //Count total de-briefing appointments
-        for(Appointment appointment : DBAppointments.getAllAppointments()){
-            if(appointment.getType().getValue().equals("De-Briefing")){
-                count++;
-            }
-        }
-        debriefingTotal.setText(Integer.toString(count));
-        count = 0;
 
         //Count Anika's appointments
         for(Appointment appointment : DBAppointments.getAllAppointments()){
@@ -335,6 +366,9 @@ public class ReportsController implements Initializable {
         }else{
             setFrenchLabels();
         }
+
+        typeCol.setCellValueFactory(data -> data.getValue().getType());
+        totalCol.setCellValueFactory(data -> data.getValue().getTotal());
 
         anikaIdCol.setCellValueFactory(data -> data.getValue().getId());
         anikaTitleCol.setCellValueFactory(data -> data.getValue().getTitle());
